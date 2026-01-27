@@ -81,7 +81,8 @@
             height: 100%;
             background: #ECDC2C;
             border-radius: 3px;
-            transition: width 0.3s ease;
+            /* Use JS animation for smoother, controllable progress */
+            transition: none;
             width: 0%;
         }
 
@@ -734,12 +735,72 @@
         /**
          * Update loading progress
          */
+        // Progress animation helpers
+        let __currentProgress = 0;
+        let __progressAnimation = null;
+        let __trickleTimer = null;
+
+        function animateProgressTo(targetPercent, duration = 2000) {
+            cancelAnimationFrame(__progressAnimation);
+            const start = performance.now();
+            const initial = __currentProgress;
+            const delta = Math.max(0, targetPercent - initial);
+            if (delta === 0) return;
+
+            function step(now) {
+                const t = Math.min(1, (now - start) / duration);
+                // ease-out cubic
+                const eased = 1 - Math.pow(1 - t, 3);
+                __currentProgress = initial + delta * eased;
+                const progressBar = document.getElementById('loading-progress-bar');
+                if (progressBar) progressBar.style.width = Math.max(0, Math.min(100, __currentProgress)) + '%';
+                if (t < 1) {
+                    __progressAnimation = requestAnimationFrame(step);
+                } else {
+                    __progressAnimation = null;
+                }
+            }
+            __progressAnimation = requestAnimationFrame(step);
+        }
+
+        // Small trickle to show subtle movement while waiting for long operations
+        function startTrickle(maxCap = 95, step = 0.3, interval = 600) {
+            clearInterval(__trickleTimer);
+            __trickleTimer = setInterval(() => {
+                if (__currentProgress >= maxCap) return;
+                const next = Math.min(maxCap, __currentProgress + step);
+                animateProgressTo(next, 1200);
+            }, interval);
+        }
+
+        function stopTrickle() {
+            if (__trickleTimer) {
+                clearInterval(__trickleTimer);
+                __trickleTimer = null;
+            }
+        }
+
+        /**
+         * Update loading progress (text + percent)
+         */
         function updateProgress(text, percent) {
-            const progressBar = document.getElementById('loading-progress-bar');
             const statusText = document.getElementById('loading-status');
-            
-            if (progressBar) progressBar.style.width = percent + '%';
             if (statusText) statusText.textContent = text;
+
+            if (typeof percent === 'number') {
+                // Ensure percent is within bounds
+                const clamped = Math.max(0, Math.min(100, percent));
+                // Use a slower animation for visible progress
+                animateProgressTo(clamped, 1800);
+                // If progress is not completed, keep trickling slowly up to 90%
+                if (clamped < 100) {
+                    startTrickle(90, 0.4, 700);
+                } else {
+                    // On completion, stop trickle and quickly finalize to 100%
+                    stopTrickle();
+                    animateProgressTo(100, 600);
+                }
+            }
         }
 
         /**
