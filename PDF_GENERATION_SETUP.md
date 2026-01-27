@@ -103,6 +103,32 @@ const blob = await response.blob();
 8. **Playwright generates PDF** → Server-side rendering
 9. **PDF downloaded** → Browser handles file download
 
+---
+
+## Deploying to Vercel
+You can deploy this project to Vercel. The repository includes a `vercel.json` configuration that:
+- Builds `server.js` as a serverless function (`@vercel/node`) and serves static assets
+- Routes requests to `/api/*` to the serverless function
+
+Recommended steps:
+1. Install the Vercel CLI (optional): `npm i -g vercel`
+2. Login and link your project: `vercel login` then `vercel link`
+3. Set required environment variables in the Vercel dashboard or via CLI (secrets):
+   - `GEMINI_API_KEY` (add as a secret/environment variable — **do not** store it in the repo)
+   - `GEMINI_MODEL` (e.g., `gemini-2.5-flash`)
+   - `GEMINI_BASE_URL` (e.g., `https://generativelanguage.googleapis.com/v1/models`)
+   - `PLAYWRIGHT_HEADLESS` (true/false)
+   - `PDF_FORMAT`, `PDF_MARGIN_MM` (optional)
+
+Using the CLI to add a secret:
+```bash
+vercel env add GEMINI_API_KEY production
+```
+
+Notes:
+- Use Vercel project settings to add `GEMINI_API_KEY` — do not commit secrets to Git.
+- If you prefer a dedicated backend, deploy the server on a VM or managed service and configure `insights-generator.js` to use the hosted server URL.
+
 ## Features
 
 - ✅ Server-side PDF generation with Playwright
