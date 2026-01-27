@@ -1,465 +1,404 @@
-// ==================== AI INSIGHTS GENERATOR ====================
-// This file handles the generation of AI-powered insights for the audit report
+// ==================== INSIGHTS GENERATOR ====================
+// This module handles AI-powered insights generation for the audit report
 
+// NOTE: For security, the Gemini API key is stored on the server and accessed via a proxy endpoint.
+// Do NOT hard-code API keys in client-side code. The server exposes POST /api/generate-insights which proxies requests to Gemini.
+
+
+/**
+ * Main class for generating AI insights
+ */
 class InsightsGenerator {
     constructor() {
-        this.apiKey = null; // Will be set when needed
         this.auditData = null;
         this.companyInfo = null;
-        this.generatedInsights = null;
+        this.insights = null;
     }
 
     /**
-     * Initialize the generator with audit data
+     * Load audit data from localStorage
      */
-    initialize(auditData, companyInfo) {
-        this.auditData = auditData;
-        this.companyInfo = companyInfo;
-    }
-
-    /**
-     * Generate insights using Google Gemini API
-     */
-    async generateInsights() {
+    loadAuditData() {
         try {
-            // Show loading state
-            this.showLoader();
+            const savedResponses = localStorage.getItem('audit-responses');
+            const savedCompanyInfo = localStorage.getItem('company-info');
+            const savedQuestionnaire = localStorage.getItem('audit-questionnaire');
 
-            // Prepare the prompt for AI
-            const prompt = this.preparePrompt();
+            if (savedResponses) {
+                this.responses = JSON.parse(savedResponses);
+            }
 
-            // Call Gemini API
-            const insights = await this.callGeminiAPI(prompt);
+            if (savedCompanyInfo) {
+                this.companyInfo = JSON.parse(savedCompanyInfo);
+            }
 
-            // Parse and structure the insights
-            this.generatedInsights = this.parseInsights(insights);
-
-            // Hide loader
-            this.hideLoader();
-
-            return this.generatedInsights;
+            return true;
         } catch (error) {
-            console.error('Error generating insights:', error);
-            this.hideLoader();
-            throw error;
+            console.error('Error loading audit data:', error);
+            return false;
         }
     }
 
     /**
-     * Prepare the AI prompt with audit data
+     * Load questionnaire data
      */
-    preparePrompt() {
-        const axesScores = this.auditData.axes.map(axis => ({
-            title: axis.title,
-            score: this.calculateAxisScore(axis),
-            weight: axis.weight_percent
-        }));
-
-        const globalScore = this.calculateGlobalScore();
-
-        const prompt = `Tu es un expert en intelligence artificielle et en transformation digitale. Tu réalises un audit de maturité IA pour l'entreprise "${this.companyInfo.name}".
-
-CONTEXTE DE L'ENTREPRISE:
-- Nom: ${this.companyInfo.name}
-- Secteur: ${this.companyInfo.sector || 'Non spécifié'}
-- Taille: ${this.companyInfo.size || 'Non spécifié'}
-- Description: ${this.companyInfo.description || 'Non spécifié'}
-
-RÉSULTATS DE L'AUDIT (Score global: ${globalScore.toFixed(2)}/5):
-
-${axesScores.map(axis => `
-${axis.title} (${axis.weight}%): ${axis.score.toFixed(2)}/5
-${this.getAxisDetails(axis.title)}
-`).join('\n')}
-
-INSTRUCTIONS:
-Génère un rapport d'analyse complet au format JSON avec la structure EXACTE suivante:
-
-{
-  "resume_executif": "Un résumé concis de 2-3 phrases sur le niveau de maturité IA global",
-  "niveau_maturite": "Excellence|Avancé|Intermédiaire|Débutant|Initial avec une brève explication",
-  "axes": [
-    {
-      "nom": "STRATÉGIE IA",
-      "score": ${axesScores[0].score.toFixed(1)},
-      "points_forts": ["Point fort 1", "Point fort 2"],
-      "faiblesses": ["Faiblesse 1", "Faiblesse 2"],
-      "recommandations": ["Recommandation 1", "Recommandation 2", "Recommandation 3"],
-      "evaluation_detaillee": "Une évaluation détaillée de cet axe en 2-3 phrases"
-    },
-    ... (répéter pour les 6 axes)
-  ],
-  "analyse_globale": "Une analyse approfondie de la maturité globale en 4-5 phrases, incluant les tendances, les risques et opportunités",
-  "feuille_de_route": {
-    "actions_prioritaires": [
-      "Action prioritaire 1 avec des détails spécifiques",
-      "Action prioritaire 2 avec des détails spécifiques",
-      "Action prioritaire 3 avec des détails spécifiques",
-      "Action prioritaire 4 avec des détails spécifiques",
-      "Action prioritaire 5 avec des détails spécifiques"
-    ],
-    "conclusion": "Une conclusion motivante et orientée action en 2-3 phrases"
-  }
-}
-
-IMPORTANT: 
-- Retourne UNIQUEMENT du JSON valide, sans texte avant ou après
-- Les recommandations doivent être spécifiques, actionnables et adaptées au secteur de l'entreprise
-- L'analyse doit être professionnelle, constructive et orientée solutions
-- Utilise les scores réels pour guider ton analyse
-- Les 6 axes sont: STRATÉGIE IA, DATA, TECHNOLOGIES, GOUVERNANCE, CULTURE ORGANISATIONNELLE, INFRASTRUCTURE`;
-
-        return prompt;
+    async loadQuestionnaire() {
+        try {
+            const response = await fetch('/src/data/questionnaire_maturite_ia.json');
+            this.questionnaire = await response.json();
+            return true;
+        } catch (error) {
+            console.error('Error loading questionnaire:', error);
+            return false;
+        }
     }
 
     /**
-     * Get detailed information about an axis
+     * Calculate axis score
      */
-    getAxisDetails(axisTitle) {
-        const axis = this.auditData.axes.find(a => a.title === axisTitle);
-        if (!axis) return '';
+    calculateAxisScore(axisId) {
+        if (!this.questionnaire || !this.responses) return 0;
 
-        let details = '';
-        axis.sub_axes.forEach(subAxis => {
-            const subScore = this.calculateSubAxisScore(axis.id, subAxis.id);
-            details += `  - ${subAxis.title}: ${subScore.toFixed(2)}/5\n`;
-        });
+        const axis = this.questionnaire.axes.find(a => a.id === axisId);
+        if (!axis) return 0;
 
-        return details;
-    }
-
-    /**
-     * Calculate score for an axis
-     */
-    calculateAxisScore(axis) {
         let totalScore = 0;
-        let totalQuestions = 0;
+        let answeredQuestions = 0;
 
         axis.sub_axes.forEach(subAxis => {
             subAxis.questions.forEach(question => {
-                const response = this.auditData.responses[question.id];
-                if (response && response.score) {
+                const response = this.responses[question.id];
+                if (response && response.score !== undefined) {
                     totalScore += response.score;
-                    totalQuestions++;
+                    answeredQuestions++;
                 }
             });
         });
 
-        return totalQuestions > 0 ? totalScore / totalQuestions : 0;
-    }
-
-    /**
-     * Calculate score for a sub-axis
-     */
-    calculateSubAxisScore(axisId, subAxisId) {
-        const axis = this.auditData.axes.find(a => a.id === axisId);
-        if (!axis) return 0;
-
-        const subAxis = axis.sub_axes.find(sa => sa.id === subAxisId);
-        if (!subAxis) return 0;
-
-        let totalScore = 0;
-        let totalQuestions = 0;
-
-        subAxis.questions.forEach(question => {
-            const response = this.auditData.responses[question.id];
-            if (response && response.score) {
-                totalScore += response.score;
-                totalQuestions++;
-            }
-        });
-
-        return totalQuestions > 0 ? totalScore / totalQuestions : 0;
+        return answeredQuestions > 0 ? totalScore / answeredQuestions : 0;
     }
 
     /**
      * Calculate global score
      */
     calculateGlobalScore() {
-        let weightedSum = 0;
+        if (!this.questionnaire) return 0;
+
+        let totalWeightedScore = 0;
         let totalWeight = 0;
 
-        this.auditData.axes.forEach(axis => {
-            const axisScore = this.calculateAxisScore(axis);
-            weightedSum += axisScore * axis.weight_percent;
-            totalWeight += axis.weight_percent;
+        this.questionnaire.axes.forEach(axis => {
+            const axisScore = this.calculateAxisScore(axis.id);
+            const weight = axis.weight_percent / 100;
+            totalWeightedScore += axisScore * weight;
+            totalWeight += weight;
         });
 
-        return totalWeight > 0 ? weightedSum / totalWeight : 0;
+        return totalWeight > 0 ? totalWeightedScore : 0;
     }
 
     /**
-     * Call Google Gemini API
+     * Prepare comprehensive audit data for AI analysis
      */
-    async callGeminiAPI(prompt) {
-        const apiKey = 'AIzaSyADjGk72VLTpibBdFLzT3NkTshgU2pRdDQ'; // API key from user
-        const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    prepareAuditDataForAI() {
+        if (!this.questionnaire || !this.responses) {
+            console.error('Questionnaire or responses not available');
+            return null;
+        }
 
-        const requestBody = {
-            contents: [{
-                parts: [{
-                    text: prompt
-                }]
-            }],
-            generationConfig: {
-                temperature: 0.7,
-                topK: 40,
-                topP: 0.95,
-                maxOutputTokens: 8192,
-            }
+        const auditData = {
+            globalScore: this.calculateGlobalScore(),
+            company: this.companyInfo,
+            axes: []
         };
 
+        // Compile information for each axis
+        this.questionnaire.axes.forEach(axis => {
+            const axisScore = this.calculateAxisScore(axis.id);
+
+            const axisData = {
+                id: axis.id,
+                title: axis.title,
+                score: axisScore,
+                weight: axis.weight_percent,
+                sub_axes: []
+            };
+
+            // Compile information for each sub-axis
+            axis.sub_axes.forEach(subAxis => {
+                const subAxisData = {
+                    id: subAxis.id,
+                    title: subAxis.title,
+                    questions: []
+                };
+
+                // Compile responses for each question
+                subAxis.questions.forEach(question => {
+                    const response = this.responses[question.id] || {};
+                    const score = response.score !== undefined ? response.score : 0;
+
+                    // Get score meaning
+                    const scoreSignification = question.notes ? question.notes[score] || '' : '';
+
+                    subAxisData.questions.push({
+                        id: question.id,
+                        text: question.text,
+                        score: score,
+                        signification: scoreSignification
+                    });
+                });
+
+                axisData.sub_axes.push(subAxisData);
+            });
+
+            auditData.axes.push(axisData);
+        });
+
+        return auditData;
+    }
+
+    /**
+     * Get maturity level description
+     */
+    getMaturityLevel(score) {
+        if (score >= 4.5) return "Excellence - Votre organisation est un leader en matière d'IA";
+        if (score >= 3.5) return "Avancé - Bonne maturité avec quelques axes d'amélioration";
+        if (score >= 2.5) return "Intermédiaire - Fondations solides, développement en cours";
+        if (score >= 1.5) return "Débutant - Premiers pas vers la maturité IA";
+        return "Initial - Opportunités significatives de développement";
+    }
+
+    /**
+     * Build the prompt for AI analysis
+     */
+    buildPrompt(auditData) {
+        return `Tu es un consultant expert en transformation digitale et intelligence artificielle. 
+Analyse les résultats de cet audit de maturité IA et génère un rapport détaillé en JSON.
+
+## Informations de l'entreprise:
+- Nom: ${auditData.company?.name || 'Non spécifié'}
+- Secteur: ${auditData.company?.sector || 'Non spécifié'}
+- Taille: ${auditData.company?.size || 'Non spécifié'}
+- Description: ${auditData.company?.description || 'Non spécifié'}
+
+## Score Global: ${auditData.globalScore.toFixed(2)}/5
+
+## Résultats par Axe:
+${auditData.axes.map(axis => `
+### ${axis.title} (Score: ${axis.score.toFixed(2)}/5, Poids: ${axis.weight}%)
+${axis.sub_axes.map(subAxis => `
+  - ${subAxis.title}:
+${subAxis.questions.map(q => `    * ${q.text}: ${q.score}/5 - ${q.signification}`).join('\n')}`).join('\n')}`).join('\n')}
+
+## Instructions:
+Génère un JSON avec EXACTEMENT cette structure (remplace les valeurs par ton analyse):
+
+{
+  "resume_executif": "Un paragraphe de synthèse globale de la maturité IA de l'entreprise",
+  "niveau_maturite": "Description du niveau de maturité (Initial/Débutant/Intermédiaire/Avancé/Excellence)",
+  "axes": [
+    {
+      "id": 1,
+      "titre": "STRATÉGIE IA",
+      "score": 3.5,
+      "forces": ["Force majeure 1", "Force majeure 2"],
+      "faiblesses": ["Faiblesse critique 1", "Faiblesse critique 2"],
+      "recommandations": ["Recommandation 1", "Recommandation 2", "Recommandation 3"],
+      "evaluation_detaillee": "Paragraphe d'évaluation détaillée de cet axe - MAXIMUM 5 PHRASES"
+    },
+    {
+      "id": 2,
+      "titre": "DATA",
+      "score": 3.8,
+      "forces": ["Force majeure 1", "Force majeure 2"],
+      "faiblesses": ["Faiblesse critique 1", "Faiblesse critique 2"],
+      "recommandations": ["Recommandation 1", "Recommandation 2", "Recommandation 3"],
+      "evaluation_detaillee": "Paragraphe d'évaluation détaillée de cet axe - MAXIMUM 5 PHRASES"
+    },
+    {
+      "id": 3,
+      "titre": "TECHNOLOGIES",
+      "score": 2.9,
+      "forces": ["Force majeure 1", "Force majeure 2"],
+      "faiblesses": ["Faiblesse critique 1", "Faiblesse critique 2"],
+      "recommandations": ["Recommandation 1", "Recommandation 2", "Recommandation 3"],
+      "evaluation_detaillee": "Paragraphe d'évaluation détaillée de cet axe - MAXIMUM 5 PHRASES"
+    },
+    {
+      "id": 4,
+      "titre": "GOUVERNANCE",
+      "score": 3.1,
+      "forces": ["Force majeure 1", "Force majeure 2"],
+      "faiblesses": ["Faiblesse critique 1", "Faiblesse critique 2"],
+      "recommandations": ["Recommandation 1", "Recommandation 2", "Recommandation 3"],
+      "evaluation_detaillee": "Paragraphe d'évaluation détaillée de cet axe - MAXIMUM 5 PHRASES"
+    },
+    {
+      "id": 5,
+      "titre": "CULTURE ORGANISATIONNELLE",
+      "score": 3.6,
+      "forces": ["Force majeure 1", "Force majeure 2"],
+      "faiblesses": ["Faiblesse critique 1", "Faiblesse critique 2"],
+      "recommandations": ["Recommandation 1", "Recommandation 2", "Recommandation 3"],
+      "evaluation_detaillee": "Paragraphe d'évaluation détaillée de cet axe - MAXIMUM 5 PHRASES"
+    },
+    {
+      "id": 6,
+      "titre": "INFRASTRUCTURE",
+      "score": 3.0,
+      "forces": ["Force majeure 1", "Force majeure 2"],
+      "faiblesses": ["Faiblesse critique 1", "Faiblesse critique 2"],
+      "recommandations": ["Recommandation 1", "Recommandation 2", "Recommandation 3"],
+      "evaluation_detaillee": "Paragraphe d'évaluation détaillée de cet axe - MAXIMUM 5 PHRASES"
+    }
+  ],
+  "analyse_globale": "Paragraphe d'analyse globale de la maturité IA",
+  "feuille_de_route": {
+    "actions_prioritaires": [
+      "Action prioritaire 1 avec description détaillée",
+      "Action prioritaire 2 avec description détaillée",
+      "Action prioritaire 3 avec description détaillée",
+      "Action prioritaire 4 avec description détaillée",
+      "Action prioritaire 5 avec description détaillée"
+    ],
+    "conclusion": "Paragraphe de conclusion avec vision à moyen/long terme"
+  }
+}
+
+IMPORTANT: 
+- Utilise les scores RÉELS de l'audit fournis ci-dessus
+- Adapte l'analyse au secteur et à la taille de l'entreprise
+- Sois spécifique et actionnable dans les recommandations
+- Pour le champ "evaluation_detaillee": MAXIMUM 2 PHRASES par axe (pas plus)
+- Réponds UNIQUEMENT avec le JSON, sans texte avant ou après`;
+    }
+
+    /**
+     * Call Gemini API to generate insights
+     */
+    async callGeminiAPI(prompt) {
         try {
-            const response = await fetch(apiUrl, {
+            // Call server-side proxy to keep API key secret
+            // Use absolute server URL for local dev; change if your server is hosted elsewhere
+            const serverUrl = 'http://localhost:3001/api/generate-insights';
+            const response = await fetch(serverUrl, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestBody)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
             });
 
             if (!response.ok) {
-                throw new Error(`API call failed: ${response.statusText}`);
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Server proxy error:', errorData);
+                throw new Error(`Server proxy error: ${response.status}`);
             }
 
             const data = await response.json();
-            
-            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                return data.candidates[0].content.parts[0].text;
-            } else {
-                throw new Error('Invalid API response structure');
-            }
-        } catch (error) {
-            console.error('Gemini API Error:', error);
-            throw error;
-        }
-    }
 
-    /**
-     * Parse AI response into structured insights
-     */
-    parseInsights(aiResponse) {
-        try {
-            // Remove markdown code blocks if present
-            let cleanedResponse = aiResponse.trim();
-            if (cleanedResponse.startsWith('```json')) {
-                cleanedResponse = cleanedResponse.replace(/```json\n?/g, '').replace(/```\n?/g, '');
-            } else if (cleanedResponse.startsWith('```')) {
-                cleanedResponse = cleanedResponse.replace(/```\n?/g, '');
-            }
-
-            const insights = JSON.parse(cleanedResponse);
-            
-            // Validate the structure
-            if (!insights.axes || insights.axes.length !== 6) {
-                throw new Error('Invalid insights structure: missing or incorrect number of axes');
-            }
-
-            return insights;
-        } catch (error) {
-            console.error('Error parsing insights:', error);
-            console.log('AI Response:', aiResponse);
-            throw new Error('Failed to parse AI insights. Please try again.');
-        }
-    }
-
-    /**
-     * Prepare data for PDF template
-     */
-    preparePDFData() {
-        if (!this.generatedInsights) {
-            throw new Error('Insights not generated yet');
-        }
-
-        const globalScore = this.calculateGlobalScore();
-        const axesScores = this.auditData.axes.map(axis => this.calculateAxisScore(axis));
-        const axesLabels = this.auditData.axes.map(axis => axis.title);
-
-        // Prepare data object with all placeholders
-        const pdfData = {
-            // Company information
-            companyName: this.companyInfo.name || 'Entreprise',
-            companyEmail: this.companyInfo.email || 'Non spécifié',
-            companyPhone: this.companyInfo.phone || 'Non spécifié',
-            reportDate: new Date().toLocaleDateString('fr-FR', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            }),
-
-            // Global score
-            Score: globalScore.toFixed(1),
-            maturityLevel: this.generatedInsights.niveau_maturite,
-
-            // Chart data
-            axesLabels: axesLabels,
-            axesScores: axesScores.map(s => parseFloat(s.toFixed(1))),
-
-            // Individual axes data
-            ...this.prepareAxesData(),
-
-            // Global analysis
-            globalAnalysis: this.generatedInsights.analyse_globale,
-
-            // Roadmap
-            ...this.prepareRoadmapData()
-        };
-
-        return pdfData;
-    }
-
-    /**
-     * Prepare axes-specific data
-     */
-    prepareAxesData() {
-        const axesData = {};
-
-        this.generatedInsights.axes.forEach((axis, index) => {
-            const axisNum = index + 1;
-            
-            axesData[`axis${axisNum}Score`] = axis.score;
-            axesData[`axis${axisNum}Strength1`] = axis.points_forts[0] || '';
-            axesData[`axis${axisNum}Strength2`] = axis.points_forts[1] || '';
-            axesData[`axis${axisNum}Weakness1`] = axis.faiblesses[0] || '';
-            axesData[`axis${axisNum}Weakness2`] = axis.faiblesses[1] || '';
-            axesData[`axis${axisNum}Recommendation1`] = axis.recommandations[0] || '';
-            axesData[`axis${axisNum}Recommendation2`] = axis.recommandations[1] || '';
-            axesData[`axis${axisNum}Recommendation3`] = axis.recommandations[2] || '';
-            axesData[`axis${axisNum}DetailedEvaluation`] = axis.evaluation_detaillee || '';
-        });
-
-        return axesData;
-    }
-
-    /**
-     * Prepare roadmap data
-     */
-    prepareRoadmapData() {
-        const actions = this.generatedInsights.feuille_de_route.actions_prioritaires;
-        
-        return {
-            Action1: actions[0] || '',
-            Action2: actions[1] || '',
-            Action3: actions[2] || '',
-            Action4: actions[3] || '',
-            Action5: actions[4] || '',
-            RoadmapConclusion: this.generatedInsights.feuille_de_route.conclusion || ''
-        };
-    }
-
-    /**
-     * Open PDF page with generated data
-     */
-    openPDFPage() {
-        const pdfData = this.preparePDFData();
-        
-        // Read the PDF template
-        fetch('pdf.html')
-            .then(response => response.text())
-            .then(template => {
-                // Replace all placeholders with actual data
-                let populatedHTML = template;
-                
-                Object.keys(pdfData).forEach(key => {
-                    if (typeof pdfData[key] !== 'object') {
-                        const placeholder = `\${${key}}`;
-                        const value = pdfData[key];
-                        populatedHTML = populatedHTML.replace(new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), value);
+            // If Gemini proxy returned the same structure, examine candidates
+            if (data && data.candidates && data.candidates[0]) {
+                const candidate = data.candidates[0];
+                if (candidate.finishReason === 'MAX_TOKENS') {
+                    console.error('Proxy: API response truncated due to token limit.');
+                }
+                if (candidate.content && candidate.content.parts) {
+                    const textContent = candidate.content.parts[0].text;
+                    try {
+                        return JSON.parse(textContent);
+                    } catch (parseError) {
+                        console.error('Initial JSON parse failed, attempting fallback:', parseError.message);
+                        const jsonMatch = textContent.match(/\{[\s\S]*\}/);
+                        if (jsonMatch) {
+                            try {
+                                return JSON.parse(jsonMatch[0]);
+                            } catch (fallbackError) {
+                                console.error('Fallback JSON parse also failed');
+                                throw new Error(`Failed to parse AI response. Response length: ${textContent.length}, Finish reason: ${candidate.finishReason}`);
+                            }
+                        }
+                        throw new Error('No JSON found in API response');
                     }
-                });
-
-                // Open in new window
-                const pdfWindow = window.open('', '_blank');
-                pdfWindow.document.write(populatedHTML);
-                pdfWindow.document.close();
-
-                // Pass chart data to the new window
-                pdfWindow.axesData = {
-                    axesLabels: pdfData.axesLabels,
-                    axesScores: pdfData.axesScores
-                };
-
-                // Save insights to localStorage for later use
-                localStorage.setItem('last-generated-insights', JSON.stringify(this.generatedInsights));
-            })
-            .catch(error => {
-                console.error('Error loading PDF template:', error);
-                alert('Erreur lors du chargement du template PDF');
-            });
-    }
-
-    /**
-     * Show loading overlay
-     */
-    showLoader() {
-        let loader = document.getElementById('insights-loader');
-        if (!loader) {
-            loader = document.createElement('div');
-            loader.id = 'insights-loader';
-            loader.className = 'insights-loader';
-            loader.innerHTML = `
-                <div class="loader-content">
-                    <div class="loader-spinner"></div>
-                    <h3>Génération des insights IA en cours...</h3>
-                    <p>Analyse de vos réponses et création du rapport personnalisé</p>
-                    <div class="loader-progress">
-                        <div class="loader-progress-bar"></div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(loader);
-        }
-        loader.style.display = 'flex';
-
-        // Animate progress bar
-        const progressBar = loader.querySelector('.loader-progress-bar');
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress > 90) progress = 90;
-            progressBar.style.width = `${progress}%`;
-        }, 500);
-        
-        loader.progressInterval = interval;
-    }
-
-    /**
-     * Hide loading overlay
-     */
-    hideLoader() {
-        const loader = document.getElementById('insights-loader');
-        if (loader) {
-            if (loader.progressInterval) {
-                clearInterval(loader.progressInterval);
+                }
             }
-            const progressBar = loader.querySelector('.loader-progress-bar');
-            progressBar.style.width = '100%';
-            
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 500);
+
+            // If the proxy returns a different shape (directly parsed), return it
+            if (data && typeof data === 'object' && (data.resume_executif || data.axes)) {
+                return data;
+            }
+
+            throw new Error('Invalid API response structure from proxy');
+
+        } catch (error) {
+            console.error('Error calling server proxy for Gemini:', error);
+            throw error;
         }
     }
 
     /**
-     * Main function to generate and display insights
+     * Generate insights using AI
      */
-    async generateAndDisplay() {
+    async generateInsights(onProgress = null) {
         try {
-            // Generate insights
-            await this.generateInsights();
+            if (onProgress) onProgress('Chargement des données...', 10);
 
-            // Open PDF page with insights
-            this.openPDFPage();
+            // Load data
+            this.loadAuditData();
+            await this.loadQuestionnaire();
 
-            return this.generatedInsights;
+            if (onProgress) onProgress('Préparation de l\'analyse...', 25);
+
+            // Prepare audit data
+            const auditData = this.prepareAuditDataForAI();
+            if (!auditData) {
+                throw new Error('Failed to prepare audit data');
+            }
+
+            if (onProgress) onProgress('Génération des insights IA...', 50);
+
+            // Build prompt and call API
+            const prompt = this.buildPrompt(auditData);
+            const insights = await this.callGeminiAPI(prompt);
+
+            if (onProgress) onProgress('Finalisation du rapport...', 90);
+
+            // Store insights
+            this.insights = {
+                ...insights,
+                generatedAt: new Date().toISOString(),
+                company: this.companyInfo,
+                globalScore: auditData.globalScore
+            };
+
+            // Save to localStorage for the report page
+            localStorage.setItem('generated-insights', JSON.stringify(this.insights));
+
+            if (onProgress) onProgress('Rapport prêt!', 100);
+
+            return this.insights;
         } catch (error) {
-            console.error('Error in generateAndDisplay:', error);
-            alert('Une erreur est survenue lors de la génération des insights. Veuillez réessayer.');
+            console.error('Error generating insights:', error);
             throw error;
+        }
+    }
+
+    /**
+     * Get stored insights
+     */
+    getStoredInsights() {
+        try {
+            const stored = localStorage.getItem('generated-insights');
+            return stored ? JSON.parse(stored) : null;
+        } catch (error) {
+            console.error('Error getting stored insights:', error);
+            return null;
         }
     }
 }
 
-// Export for use in other files
-window.InsightsGenerator = InsightsGenerator;
+// Create global instance
+window.insightsGenerator = new InsightsGenerator();
+
+// Export for module usage
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = InsightsGenerator;
+}

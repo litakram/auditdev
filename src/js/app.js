@@ -669,33 +669,12 @@ class AuditApp {
         };
         
         this.saveData();
+        this.showNotification('Génération du rapport en cours...', 'info');
         
-        // Generate insights and display PDF
-        this.generateInsightsReport();
-    }
-
-    async generateInsightsReport() {
-        try {
-            // Initialize the insights generator
-            const generator = new InsightsGenerator();
-            
-            // Prepare audit data with questionnaire and responses
-            const auditData = {
-                axes: this.questionnaire.axes,
-                responses: this.responses
-            };
-            
-            // Initialize with data
-            generator.initialize(auditData, this.companyInfo);
-            
-            // Generate and display insights (this will show loader automatically)
-            await generator.generateAndDisplay();
-            
-            this.showNotification('Rapport généré avec succès', 'success');
-        } catch (error) {
-            console.error('Error generating insights report:', error);
-            this.showNotification('Erreur lors de la génération du rapport', 'error');
-        }
+        // Redirect to the report page for AI insights generation
+        setTimeout(() => {
+            window.location.href = '/report.html';
+        }, 500);
     }
 
 

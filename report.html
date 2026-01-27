@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit de Maturité IA - Rapport</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #1e293b;
+            background-color: #f8fafc;
+            line-height: 1.5;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #081d3f 0%, #1e3a6e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #ECDC2C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .loading-progress {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: #ECDC2C;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .loading-status {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .loading-logo {
+            width: 120px;
+            margin-bottom: 40px;
+        }
+
+        /* Error state */
+        .error-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .error-container.show {
+            display: block;
+        }
+
+        .error-icon {
+            font-size: 60px;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+        }
+
+        .error-btn {
+            background: #ECDC2C;
+            color: #081d3f;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .error-btn:hover {
+            background: #d4c426;
+            transform: translateY(-2px);
+        }
+
+        /* PDF page setup */
+        .report-container {
+            display: none;
+        }
+
+        .report-container.show {
+            display: block;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10mm auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Cover page */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 297mm;
+            background: linear-gradient(135deg, #081d3f 0%, #1e3a6e 100%);
+            color: white;
+            padding: 40mm 20mm;
+            position: relative;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100mm;
+            height: 100mm;
+            background: url('/assets/images/ai-crafters-logo-b.png.webp') no-repeat;
+            background-size: contain;
+            opacity: 0.1;
+            transform: translate(30%, -30%);
+        }
+
+        .cover-header {
+            text-align: left;
+        }
+
+        .cover-title {
+            font-size: 36pt;
+            font-weight: 800;
+            margin-bottom: 10mm;
+        }
+
+        .cover-subtitle {
+            font-size: 18pt;
+            font-weight: 500;
+            margin-bottom: 5mm;
+        }
+
+        .cover-company {
+            margin-top: 20mm;
+        }
+
+        .company-name {
+            font-size: 24pt;
+            font-weight: 700;
+            margin-bottom: 5mm;
+            color: #ECDC2C;
+        }
+
+        .report-date {
+            font-size: 14pt;
+            font-weight: 400;
+        }
+
+        .company-contact {
+            font-size: 14pt;
+            color: #fff;
+            margin-top: 2mm;
+        }
+
+        .cover-footer {
+            margin-top: 60mm;
+            display: flex;
+            align-items: center;
+            gap: 10mm;
+        }
+
+        .company-logo {
+            width: 50mm;
+            height: auto;
+        }
+
+        /* Header and footer */
+        .page-header {
+            position: absolute;
+            top: 10mm;
+            right: 20mm;
+            font-size: 9pt;
+            color: #64748b;
+        }
+
+        .page-footer {
+            position: absolute;
+            bottom: 20mm;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 9pt;
+            color: #64748b;
+        }
+
+        /* Content styling */
+        h1 {
+            font-size: 24pt;
+            font-weight: 700;
+            margin-bottom: 10mm;
+            color: #081d3f;
+            border-bottom: 3px solid #ECDC2C;
+            padding-bottom: 3mm;
+        }
+
+        h2 {
+            font-size: 18pt;
+            font-weight: 600;
+            margin-top: 8mm;
+            margin-bottom: 5mm;
+            color: #081d3f;
+        }
+
+        h3 {
+            font-size: 14pt;
+            font-weight: 600;
+            margin-top: 6mm;
+            margin-bottom: 3mm;
+            color: #081d3f;
+        }
+
+        h4 {
+            font-size: 12pt;
+            font-weight: 600;
+            margin-top: 5mm;
+            margin-bottom: 2mm;
+            color: #1e293b;
+        }
+
+        p {
+            font-size: 10pt;
+            margin-bottom: 3mm;
+            text-align: justify;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #081d3f;
+        }
+
+        ul, ol {
+            margin-left: 5mm;
+            margin-bottom: 3mm;
+            font-size: 10pt;
+        }
+
+        li {
+            margin-bottom: 1mm;
+        }
+
+        .fa-angle-right {
+            color: #ECDC2C;
+            margin-right: 2mm;
+        }
+
+        /* Charts section */
+        .charts-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10mm;
+        }
+
+        .chart-container {
+            background-color: #f8fafc;
+            border-radius: 5mm;
+            padding: 5mm;
+            box-shadow: 0 2mm 5mm rgba(0, 0, 0, 0.05);
+            margin-bottom: 5mm;
+            height: 70mm;
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 12pt;
+            font-weight: 600;
+            margin-bottom: 3mm;
+            color: #081d3f;
+        }
+
+        /* Summary card */
+        .summary-card {
+            background-color: #f8fafc;
+            border-radius: 5mm;
+            padding: 5mm;
+            margin-bottom: 5mm;
+            display: flex;
+            align-items: center;
+            gap: 5mm;
+        }
+
+        .summary-score {
+            background: linear-gradient(135deg, #081d3f 0%, #1e3a6e 100%);
+            color: white;
+            padding: 4mm;
+            border-radius: 50%;
+            height: 25mm;
+            width: 25mm;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-value {
+            font-size: 16pt;
+            font-weight: 700;
+        }
+
+        .score-label {
+            font-size: 8pt;
+        }
+
+        .summary-text {
+            flex-grow: 1;
+        }
+
+        .summary-text h4 {
+            margin-top: 0;
+            margin-bottom: 1mm;
+            color: #081d3f;
+        }
+
+        .summary-text p {
+            font-size: 12pt;
+            background-color: #f1f5f9;
+            padding: 2mm 4mm;
+            border-radius: 2mm;
+            border-left: 1mm solid #ECDC2C;
+        }
+
+        /* Table of contents */
+        .toc {
+            margin-bottom: 10mm;
+        }
+
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1mm;
+            font-size: 10pt;
+        }
+
+        .toc-page {
+            color: #64748b;
+        }
+
+        .toc-leader {
+            flex-grow: 1;
+            margin: 0 2mm;
+            border-bottom: 1px dotted #cbd5e1;
+        }
+
+        /* Download button styles */
+        #download-btn-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #081d3f 0%, #1e3a6e 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #0c2a5c 0%, #244a7a 100%);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .action-btn.secondary {
+            background: #f8fafc;
+            color: #081d3f;
+            border: 2px solid #081d3f;
+        }
+
+        .action-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .download-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .download-spinner.active {
+            display: inline-block;
+        }
+
+        #download-status {
+            padding: 10px 15px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        #download-status.show {
+            display: block;
+        }
+
+        /* Print specific styles */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: none;
+            }
+            
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 210mm;
+                height: 297mm;
+                page-break-after: always;
+            }
+
+            .loading-overlay,
+            #download-btn-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <img src="/assets/images/ai-crafters-logo-b.png.webp" alt="AI Crafters Logo" class="loading-logo">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loading-text">Génération du rapport en cours...</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar" id="loading-progress-bar"></div>
+        </div>
+        <div class="loading-status" id="loading-status">Initialisation...</div>
+
+        <!-- Error Container (hidden by default) -->
+        <div class="error-container" id="error-container">
+            <div class="error-icon"><i class="fas fa-exclamation-circle"></i></div>
+            <div class="error-title">Erreur de génération</div>
+            <div class="error-message" id="error-message">Une erreur est survenue lors de la génération du rapport.</div>
+            <button class="error-btn" onclick="retryGeneration()">
+                <i class="fas fa-redo"></i> Réessayer
+            </button>
+            <button class="error-btn secondary" onclick="goBack()" style="margin-left: 10px; background: transparent; color: white; border: 2px solid white;">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+    </div>
+
+    <!-- Report Container -->
+    <div class="report-container" id="report-container">
+        <!-- Download Buttons -->
+        <div id="download-btn-container">
+            <div id="download-status"></div>
+            <button class="action-btn secondary" onclick="goBack()" title="Retour à l'audit">
+                <i class="fas fa-arrow-left"></i>
+                <span>Retour</span>
+            </button>
+            <button class="action-btn" id="download-btn" onclick="downloadPdfReport()" title="Télécharger le rapport en PDF">
+                <span class="download-spinner"></span>
+                <i class="fas fa-download"></i>
+                <span>Télécharger PDF</span>
+            </button>
+        </div>
+
+        <!-- Cover Page -->
+        <div class="page cover-page">
+            <div class="cover-header">
+                <div class="cover-title">Audit de Maturité IA</div>
+                <div class="cover-subtitle">Framework d'évaluation de la maturité IA - 6 axes d'analyse</div>
+            </div>
+            <div class="cover-company">
+                <div class="company-name" id="cover-company-name">-</div>
+                <div class="report-date" id="cover-report-date">-</div>
+                <div class="company-contact" id="cover-company-email">
+                    <i class="fas fa-envelope" style="margin-right:4mm;"></i><span>-</span>
+                </div>
+                <div class="company-contact" id="cover-company-phone">
+                    <i class="fas fa-phone" style="margin-right:4mm;"></i><span>-</span>
+                </div>
+            </div>
+            <div class="cover-footer">
+                <img src="/assets/images/ai-crafters-logo-b.png.webp" alt="AI Crafters Logo" class="company-logo">
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="page">
+            <div class="page-header">Audit de Maturité IA - Ai Crafters</div>
+            <h1>Sommaire</h1>
+            
+            <div class="toc">
+                <div class="toc-item">
+                    <div>Résumé exécutif</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">3</div>
+                </div>
+                <div class="toc-item">
+                    <div>Analyse détaillée par axe</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">4</div>
+                </div>
+                <div class="toc-item">
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;Axe 1: Stratégie IA</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">4</div>
+                </div>
+                <div class="toc-item">
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;Axe 2: Data</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">5</div>
+                </div>
+                <div class="toc-item">
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;Axe 3: Technologies</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">6</div>
+                </div>
+                <div class="toc-item">
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;Axe 4: Gouvernance</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">7</div>
+                </div>
+                <div class="toc-item">
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;Axe 5: Culture organisationnelle</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">8</div>
+                </div>
+                <div class="toc-item">
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;Axe 6: Infrastructure</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">9</div>
+                </div>
+                <div class="toc-item">
+                    <div>Évaluation détaillée de l'organisation</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">10</div>
+                </div>
+                <div class="toc-item">
+                    <div>Analyse globale de la maturité IA</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">10</div>
+                </div>
+                <div class="toc-item">
+                    <div>Feuille de route d'amélioration</div>
+                    <div class="toc-leader"></div>
+                    <div class="toc-page">11</div>
+                </div>
+            </div>
+            
+            <div class="page-footer">Page 2 sur 11</div>
+        </div>
+
+        <!-- Executive Summary Page -->
+        <div class="page">
+            <div class="page-header">Audit de Maturité IA - Ai Crafters</div>
+            
+            <h1>Résumé Exécutif</h1>
+            
+            <div class="summary-card">
+                <div class="summary-score">
+                    <span class="score-value" id="global-score">-</span>
+                    <span class="score-label">/ 5.0</span>
+                </div>
+                <div class="summary-text">
+                    <h4>Niveau de Maturité IA</h4>
+                    <p id="maturity-level">-</p>
+                </div>
+            </div>
+
+            <p id="executive-summary">-</p>
+            
+            <div class="chart-container" style="height: 80mm;">
+                <canvas id="doughnut-chart"></canvas>
+            </div>
+            <div class="charts-row">
+                <div style="width: 48%">
+                    <div class="chart-title">Scores par Axe</div>
+                    <div class="chart-container">
+                        <canvas id="bar-chart"></canvas>
+                    </div>
+                </div>
+                <div style="width: 48%">
+                    <div class="chart-title">Vue d'Ensemble</div>
+                    <div class="chart-container">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-footer">Page 3 sur 11</div>
+        </div>
+
+        <!-- Axis Pages (will be populated dynamically) -->
+        <div id="axis-pages-container"></div>
+
+        <!-- Organization Evaluation Page -->
+        <div class="page">
+            <div class="page-header">Audit de Maturité IA - Ai Crafters</div>
+            
+            <h1>Évaluation Détaillée de l'Organisation</h1>
+            
+            <ul id="detailed-evaluations">
+                <!-- Will be populated dynamically -->
+            </ul>
+            
+            <h1>Analyse Globale de la Maturité IA</h1>
+            
+            <p id="global-analysis">-</p>
+                    
+            <div class="page-footer">Page 10 sur 11</div>
+        </div>
+
+        <!-- Roadmap Page -->
+        <div class="page">
+            
+            
+            <h1>Feuille de Route d'Amélioration (Actions Prioritaires)</h1>
+            
+            <ol id="priority-actions">
+                <!-- Will be populated dynamically -->
+            </ol>
+            
+            <p id="roadmap-conclusion">-</p>
+            
+            <div style="margin-top: 40mm; text-align: center;">
+                <img src="/assets/images/ai-crafters-logo-dark.png" alt="AI Crafters Logo" style="width: 60mm; height: auto;">
+                <p style="margin-top: 10mm; font-size: 9pt; color: #64748b;">
+                    © 2025 Ai Crafters - Audit de Maturité IA<br>
+                </p>
+            </div>
+            
+            <div class="page-footer">Page 11 sur 11</div>
+        </div>
+    </div>
+
+    <!-- Include the insights generator -->
+    <script src="src/js/insights-generator.js"></script>
+    
+    <script>
+        // Global variables
+        let axesData = null;
+        let insightsData = null;
+
+        /**
+         * Update loading progress
+         */
+        function updateProgress(text, percent) {
+            const progressBar = document.getElementById('loading-progress-bar');
+            const statusText = document.getElementById('loading-status');
+            
+            if (progressBar) progressBar.style.width = percent + '%';
+            if (statusText) statusText.textContent = text;
+        }
+
+        /**
+         * Show error state
+         */
+        function showError(message) {
+            const spinner = document.querySelector('.loading-spinner');
+            const loadingText = document.getElementById('loading-text');
+            const progressContainer = document.querySelector('.loading-progress');
+            const statusText = document.getElementById('loading-status');
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = document.getElementById('error-message');
+
+            if (spinner) spinner.style.display = 'none';
+            if (loadingText) loadingText.style.display = 'none';
+            if (progressContainer) progressContainer.style.display = 'none';
+            if (statusText) statusText.style.display = 'none';
+            
+            if (errorMessage) errorMessage.textContent = message;
+            if (errorContainer) errorContainer.classList.add('show');
+        }
+
+        /**
+         * Hide loading overlay and show report
+         */
+        function showReport() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const reportContainer = document.getElementById('report-container');
+
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            if (reportContainer) reportContainer.classList.add('show');
+        }
+
+        /**
+         * Go back to main app
+         */
+        function goBack() {
+            window.location.href = '/index.html';
+        }
+
+        /**
+         * Retry generation
+         */
+        function retryGeneration() {
+            window.location.reload();
+        }
+
+        /**
+         * Populate the report with insights data
+         */
+        function populateReport(insights) {
+            // Cover page
+            const companyInfo = insights.company || {};
+            document.getElementById('cover-company-name').textContent = companyInfo.name || 'Entreprise';
+            document.getElementById('cover-report-date').textContent = 'Rapport d\'analyse - ' + new Date().toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            const emailSpan = document.querySelector('#cover-company-email span');
+            if (emailSpan) emailSpan.textContent = companyInfo.email || '-';
+            
+            const phoneSpan = document.querySelector('#cover-company-phone span');
+            if (phoneSpan) phoneSpan.textContent = companyInfo.phone || '-';
+
+            // Executive summary
+            document.getElementById('global-score').textContent = (insights.globalScore || 0).toFixed(1);
+            document.getElementById('maturity-level').textContent = insights.niveau_maturite || '-';
+            document.getElementById('executive-summary').textContent = insights.resume_executif || '-';
+
+            // Generate axis pages
+            const axisContainer = document.getElementById('axis-pages-container');
+            axisContainer.innerHTML = '';
+
+            const axes = insights.axes || [];
+            axes.forEach((axis, index) => {
+                const pageNumber = 4 + index;
+                const axisHtml = `
+                    <div class="page">
+                        <div class="page-header">Audit de Maturité IA - Ai Crafters</div>
+                        
+                        ${index === 0 ? '<h1>Analyse Détaillée par Axe</h1>' : ''}
+                        
+                        <h2>Axe ${axis.id}: ${axis.titre} (Score: ${(axis.score || 0).toFixed(1)}/5)</h2>
+                        
+                        <h3><i class="fas fa-angle-right"></i>Points Forts Majeurs:</h3>
+                        <ul>
+                            ${(axis.forces || []).map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+
+                        <h3><i class="fas fa-angle-right"></i>Faiblesses Critiques:</h3>
+                        <ul>
+                            ${(axis.faiblesses || []).map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                        
+                        <h3><i class="fas fa-angle-right"></i>Recommandations:</h3>
+                        <ul>
+                            ${(axis.recommandations || []).map(r => `<li>${r}</li>`).join('')}
+                        </ul>
+                        
+                        <div class="page-footer">Page ${pageNumber} sur 11</div>
+                    </div>
+                `;
+                axisContainer.innerHTML += axisHtml;
+            });
+
+            // Detailed evaluations
+            const evaluationsContainer = document.getElementById('detailed-evaluations');
+            evaluationsContainer.innerHTML = axes.map(axis => 
+                `<li><strong>${axis.titre}:</strong> ${axis.evaluation_detaillee || '-'}</li>`
+            ).join('');
+
+            // Global analysis
+            document.getElementById('global-analysis').textContent = insights.analyse_globale || '-';
+
+            // Priority actions
+            const actionsContainer = document.getElementById('priority-actions');
+            const actions = insights.feuille_de_route?.actions_prioritaires || [];
+            actionsContainer.innerHTML = actions.map(action => `<li>${action}</li>`).join('');
+
+            // Roadmap conclusion
+            document.getElementById('roadmap-conclusion').textContent = insights.feuille_de_route?.conclusion || '-';
+
+            // Prepare axes data for charts
+            axesData = {
+                axesLabels: axes.map(a => a.titre),
+                axesScores: axes.map(a => a.score || 0)
+            };
+
+            // Render charts
+            renderCharts(axesData);
+        }
+
+        /**
+         * Render all charts
+         */
+        function renderCharts(data) {
+            const axesLabels = data.axesLabels || ['Stratégie IA', 'Data', 'Technologies', 'Gouvernance', 'Culture', 'Infrastructure'];
+            const axesScores = data.axesScores || [3.5, 3.8, 2.9, 3.1, 3.6, 3.0];
+
+            // Radar Chart
+            const radarCtx = document.getElementById('radar-chart');
+            if (radarCtx) {
+                new Chart(radarCtx.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: axesLabels,
+                        datasets: [{
+                            label: 'Maturité IA',
+                            data: axesScores,
+                            backgroundColor: 'rgba(8, 29, 63, 0.2)',
+                            borderColor: 'rgba(8, 29, 63, 0.8)',
+                            pointBackgroundColor: 'rgba(8, 29, 63, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(8, 29, 63, 1)'
+                        }, {
+                            label: 'Cible Excellence',
+                            data: [5, 5, 5, 5, 5, 5],
+                            backgroundColor: 'rgba(236, 220, 44, 0.1)',
+                            borderColor: 'rgba(236, 220, 44, 0.5)',
+                            borderWidth: 1,
+                            borderDash: [5, 5],
+                            pointBackgroundColor: 'rgba(236, 220, 44, 0.5)',
+                            pointBorderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 5,
+                                ticks: { stepSize: 1 }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Bar Chart
+            const barCtx = document.getElementById('bar-chart');
+            if (barCtx) {
+                new Chart(barCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: axesLabels,
+                        datasets: [{
+                            label: 'Score',
+                            data: axesScores,
+                            backgroundColor: [
+                                'rgba(8, 29, 63, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(139, 92, 246, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(249, 115, 22, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(8, 29, 63, 1)',
+                                'rgba(16, 185, 129, 1)',
+                                'rgba(239, 68, 68, 1)',
+                                'rgba(139, 92, 246, 1)',
+                                'rgba(245, 158, 11, 1)',
+                                'rgba(249, 115, 22, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 5,
+                                ticks: { stepSize: 1 }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+
+            // Doughnut Chart
+            const doughnutCtx = document.getElementById('doughnut-chart');
+            if (doughnutCtx) {
+                new Chart(doughnutCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: axesLabels,
+                        datasets: [{
+                            data: axesScores.map(score => score * 20),
+                            backgroundColor: [
+                                'rgba(8, 29, 63, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(139, 92, 246, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(249, 115, 22, 0.8)'
+                            ],
+                            borderColor: 'rgba(255, 255, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { font: { size: 9 }, boxWidth: 10 }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        /**
+         * Download PDF Report
+         */
+        async function downloadPdfReport() {
+            const btn = document.getElementById('download-btn');
+            const spinner = btn.querySelector('.download-spinner');
+            const statusDiv = document.getElementById('download-status');
+            const btnText = btn.querySelector('span:last-child');
+            const originalText = btnText.textContent;
+
+            btn.disabled = true;
+            spinner.classList.add('active');
+            btnText.textContent = 'Génération...';
+            statusDiv.textContent = 'Préparation du PDF...';
+            statusDiv.classList.add('show');
+
+            try {
+                // Get company name for filename
+                const companyName = document.getElementById('cover-company-name').textContent || 'Entreprise';
+                const filename = `Audit_Maturite_IA_${companyName.replace(/\s+/g, '_')}.pdf`;
+
+                // Hide download button temporarily
+                const downloadContainer = document.getElementById('download-btn-container');
+                const originalDisplay = downloadContainer.style.display;
+                downloadContainer.style.display = 'none';
+
+                statusDiv.textContent = 'Collecte des ressources...';
+
+                // Get HTML content and prepare it with styles
+                const element = document.getElementById('report-container');
+                const htmlContent = await prepareHTMLForPDF(element);
+
+                statusDiv.textContent = 'Envoi au serveur...';
+
+                // Send to server for PDF generation
+                const response = await fetch('http://localhost:3001/api/generate-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        html: htmlContent,
+                        filename: filename
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Erreur serveur: ${response.status} - ${errorText}`);
+                }
+
+                // Get PDF blob
+                const blob = await response.blob();
+
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+
+                // Show success message
+                downloadContainer.style.display = originalDisplay;
+                statusDiv.textContent = '✓ PDF téléchargé avec succès!';
+                setTimeout(() => {
+                    btn.disabled = false;
+                    spinner.classList.remove('active');
+                    btnText.textContent = originalText;
+                    statusDiv.classList.remove('show');
+                }, 2000);
+
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                const downloadContainer = document.getElementById('download-btn-container');
+                downloadContainer.style.display = originalDisplay || 'block';
+                statusDiv.textContent = '✗ Erreur: ' + (error.message || 'Impossible de créer le PDF');
+                statusDiv.style.color = '#ef4444';
+                btn.disabled = false;
+                spinner.classList.remove('active');
+                btnText.textContent = originalText;
+                setTimeout(() => {
+                    statusDiv.classList.remove('show');
+                    statusDiv.style.color = '#081d3f';
+                }, 4000);
+            }
+        }
+
+        /**
+         * Prepare HTML for PDF by inlining styles and converting images
+         */
+        async function prepareHTMLForPDF(element) {
+            // Clone the element to avoid modifying the original
+            const clone = element.cloneNode(true);
+
+            // Convert all Chart.js canvas elements to images
+            const canvases = clone.querySelectorAll('canvas');
+            for (let canvas of canvases) {
+                try {
+                    // Get the corresponding original canvas from the DOM
+                    const originalCanvas = document.querySelector(`#${canvas.id}`);
+                    if (originalCanvas) {
+                        // Convert canvas to image data URI
+                        const imageData = originalCanvas.toDataURL('image/png');
+                        
+                        // Create an img element to replace the canvas
+                        const img = document.createElement('img');
+                        img.src = imageData;
+                        img.style.maxWidth = '100%';
+                        img.style.height = 'auto';
+                        img.style.display = 'block';
+                        
+                        // Replace canvas with image
+                        canvas.parentNode.replaceChild(img, canvas);
+                    }
+                } catch (error) {
+                    console.warn('Failed to convert canvas to image:', canvas.id, error);
+                }
+            }
+
+            // Inline all CSS from stylesheets
+            const styleContent = Array.from(document.styleSheets)
+                .filter(sheet => {
+                    try {
+                        return sheet.cssRules || sheet.rules;
+                    } catch (e) {
+                        return false;
+                    }
+                })
+                .map(sheet => {
+                    try {
+                        return Array.from(sheet.cssRules || sheet.rules)
+                            .map(rule => rule.cssText)
+                            .join('\n');
+                    } catch (e) {
+                        return '';
+                    }
+                })
+                .join('\n');
+
+            // Convert all images to base64
+            const images = clone.querySelectorAll('img');
+            for (let img of images) {
+                try {
+                    const src = img.src;
+                    
+                    // Skip if already a data URI
+                    if (src.startsWith('data:')) continue;
+                    
+                    // Fetch image and convert to base64
+                    const response = await fetch(src);
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    
+                    await new Promise((resolve, reject) => {
+                        reader.onload = () => {
+                            img.src = reader.result;
+                            resolve();
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                } catch (error) {
+                    console.warn('Failed to convert image to base64:', img.src, error);
+                    // Keep original src if conversion fails
+                }
+            }
+
+            // Create complete HTML document with inlined styles
+            const completeHTML = `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Maturité IA</title>
+    <style>
+        ${styleContent}
+        /* Print-specific overrides for PDF */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #081d3f;
+            background: white !important;
+            font-size: 16px;
+        }
+        @page {
+            size: A4;
+            margin: 5mm;
+        }
+        /* Increase text sizes for better readability */
+        h1 { font-size: 28px !important; }
+        h2 { font-size: 22px !important; }
+        h3 { font-size: 18px !important; }
+        h4 { font-size: 16px !important; }
+        p { font-size: 14px !important; }
+        li { font-size: 14px !important; }
+        
+        /* Make containers fill space better */
+        .report-container, #report-container {
+            width: 100%;
+            padding: 0 !important;
+        }
+        
+        /* Optimize spacing */
+        .page, .report-page {
+            padding: 15mm !important;
+            margin: 0 !important;
+            min-height: 100vh;
+        }
+        
+        /* Cards and sections */
+        .card, .section {
+            margin-bottom: 12px !important;
+            padding: 12px !important;
+        }
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .no-break {
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    ${clone.innerHTML}
+</body>
+</html>
+            `;
+
+            return completeHTML;
+        }
+
+        /**
+         * Initialize the report page
+         */
+        async function initReport() {
+            try {
+                // Generate insights using the insights generator
+                const insights = await window.insightsGenerator.generateInsights(updateProgress);
+                
+                insightsData = insights;
+                
+                // Populate the report with the generated insights
+                populateReport(insights);
+                
+                // Show the report
+                setTimeout(() => {
+                    showReport();
+                }, 500);
+
+            } catch (error) {
+                console.error('Error initializing report:', error);
+                showError(error.message || 'Une erreur est survenue lors de la génération du rapport.');
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', initReport);
+    </script>
+</body>
+</html>
