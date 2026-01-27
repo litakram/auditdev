@@ -1,0 +1,1246 @@
+{
+  "axes": [
+    {
+      "id": 1,
+      "title": "STRATÉGIE IA",
+      "weight_percent": 25,
+      "sub_axes": [
+        {
+          "id": "1.1",
+          "title": "Vision & Alignement Stratégique",
+          "questions": [
+            {
+              "id": "Q1.1.1",
+              "text": "Disposez-vous d'une vision IA clairement définie et communiquée ?",
+              "notes": {
+                "1": "Aucune vision IA formalisée, pas de communication sur le sujet",
+                "2": "Vision IA en cours de définition, communication limitée aux équipes techniques",
+                "3": "Vision IA documentée mais communication partielle dans l'organisation",
+                "4": "Vision IA claire, bien documentée et communiquée à tous les niveaux",
+                "5": "Vision IA inspirante, différenciatrice, portée par le leadership et adoptée par tous"
+              }
+            },
+            {
+              "id": "Q1.1.2",
+              "text": "La stratégie IA est-elle alignée avec la stratégie business globale ?",
+              "notes": {
+                "1": "Aucun alignement, initiatives IA déconnectées des objectifs business",
+                "2": "Alignement partiel, quelques projets IA liés aux objectifs métiers",
+                "3": "Stratégie IA globalement alignée mais avec des gaps à combler",
+                "4": "Forte cohérence entre stratégie IA et objectifs business",
+                "5": "Intégration parfaite, l'IA est un pilier de la stratégie d'entreprise"
+              }
+            },
+            {
+              "id": "Q1.1.3",
+              "text": "Avez-vous identifié les cas d'usage IA prioritaires pour votre secteur ?",
+              "notes": {
+                "1": "Aucune identification des cas d'usage, approche opportuniste",
+                "2": "Quelques cas d'usage identifiés sans priorisation claire",
+                "3": "Catalogue de cas d'usage avec première priorisation",
+                "4": "Cas d'usage priorisés selon la valeur business et la faisabilité",
+                "5": "Portfolio optimisé avec innovation continue et benchmark sectoriel"
+              }
+            },
+            {
+              "id": "Q1.1.4",
+              "text": "La direction générale sponsorise-t-elle activement la transformation IA ?",
+              "notes": {
+                "1": "Pas de sponsoring explicite, initiatives portées uniquement par l'IT",
+                "2": "Sponsoring limité, soutien occasionnel de la direction",
+                "3": "Soutien modéré avec allocation de ressources ponctuelles",
+                "4": "Sponsoring actif avec investissements et communication régulière",
+                "5": "Leadership exemplaire, la direction incarne la transformation IA"
+              }
+            }
+          ]
+        },
+        {
+          "id": "1.2",
+          "title": "Business Case & ROI",
+          "questions": [
+            {
+              "id": "Q1.2.1",
+              "text": "Mesurez-vous le ROI de vos investissements IA ?",
+              "notes": {
+                "1": "Aucune mesure du ROI, investissements sans évaluation",
+                "2": "Tentatives de mesure ROI mais méthodologie incohérente",
+                "3": "Méthodologie ROI établie pour les projets majeurs",
+                "4": "Suivi ROI systématique avec tableaux de bord dédiés",
+                "5": "Optimisation continue du ROI avec benchmark externe"
+              }
+            },
+            {
+              "id": "Q1.2.2",
+              "text": "Avez-vous un processus structuré pour valider les business cases IA ?",
+              "notes": {
+                "1": "Pas de processus formel, validation ad-hoc",
+                "2": "Processus de validation basique avec critères simples",
+                "3": "Processus structuré avec grille d'évaluation standard",
+                "4": "Processus mature avec comité d'investissement dédié",
+                "5": "Excellence du processus avec amélioration continue et benchmarks"
+              }
+            },
+            {
+              "id": "Q1.2.3",
+              "text": "Avez-vous quantifié l'impact attendu de l'IA sur votre performance ?",
+              "notes": {
+                "1": "Aucune quantification, attentes qualitatives vagues",
+                "2": "Quelques estimations ponctuelles sans méthode rigoureuse",
+                "3": "Modélisation d'impact pour les cas d'usage principaux",
+                "4": "Quantification précise avec scenarios et sensibilité",
+                "5": "Modèles prédictifs avancés avec suivi en temps réel"
+              }
+            },
+            {
+              "id": "Q1.2.4",
+              "text": "Suivez-vous les métriques de création de valeur par l'IA ?",
+              "notes": {
+                "1": "Pas de métriques de valeur, focus uniquement technique",
+                "2": "Quelques indicateurs business mais suivi irrégulier",
+                "3": "Tableau de bord avec métriques clés mais analyse limitée",
+                "4": "Suivi complet avec analyse des tendances et actions correctives",
+                "5": "Analytics avancées avec prédiction et optimisation automatique"
+              }
+            }
+          ]
+        },
+        {
+          "id": "1.3",
+          "title": "Roadmap & Planification",
+          "questions": [
+            {
+              "id": "Q1.3.1",
+              "text": "Disposez-vous d'une roadmap IA sur 3-5 ans ?",
+              "notes": {
+                "1": "Pas de roadmap, planification projet par projet",
+                "2": "Ébauche de roadmap mais manque de détails et de jalons",
+                "3": "Roadmap structurée avec phases et objectifs principaux",
+                "4": "Roadmap détaillée avec jalons, ressources et gouvernance",
+                "5": "Roadmap dynamique avec scénarios et adaptation continue"
+              }
+            },
+            {
+              "id": "Q1.3.2",
+              "text": "La planification IA intègre-t-elle les contraintes et opportunités sectorielles ?",
+              "notes": {
+                "1": "Planification générique sans prise en compte du contexte sectoriel",
+                "2": "Prise en compte partielle des spécificités métiers",
+                "3": "Intégration des contraintes sectorielles principales",
+                "4": "Planification adaptée avec opportunités et risques sectoriels",
+                "5": "Excellence sectorielle avec innovation et différenciation concurrentielle"
+              }
+            },
+            {
+              "id": "Q1.3.3",
+              "text": "Avez-vous défini des jalons et des critères de succès pour votre transformation IA ?",
+              "notes": {
+                "1": "Pas de jalons définis, progression non mesurable",
+                "2": "Quelques jalons basiques sans critères précis",
+                "3": "Jalons structurés avec indicateurs de réussite",
+                "4": "Framework complet avec critères quantitatifs et qualitatifs",
+                "5": "Système d'évaluation sophistiqué avec amélioration continue"
+              }
+            },
+            {
+              "id": "Q1.3.4",
+              "text": "Révisez-vous régulièrement votre stratégie IA en fonction des évolutions technologiques ?",
+              "notes": {
+                "1": "Stratégie figée, pas de révision planifiée",
+                "2": "Révisions ponctuelles et réactives",
+                "3": "Révisions annuelles avec prise en compte des innovations",
+                "4": "Processus de révision continu avec veille technologique",
+                "5": "Agilité stratégique avec anticipation des disruptions"
+              }
+            }
+          ]
+        },
+        {
+          "id": "1.4",
+          "title": "Budget & Investissements",
+          "questions": [
+            {
+              "id": "Q1.4.1",
+              "text": "Avez-vous alloué un budget spécifique à l'IA dans votre planification financière ?",
+              "notes": {
+                "1": "Pas de budget IA dédié, financement au cas par cas",
+                "2": "Budget IA informel intégré dans d'autres postes",
+                "3": "Ligne budgétaire IA identifiée avec montant annuel",
+                "4": "Budget IA structuré sur plusieurs années avec gouvernance",
+                "5": "Investissement IA stratégique avec optimisation continue"
+              }
+            },
+            {
+              "id": "Q1.4.2",
+              "text": "Le niveau d'investissement IA est-il cohérent avec vos ambitions ?",
+              "notes": {
+                "1": "Décalage majeur entre ambitions et moyens alloués",
+                "2": "Investissement insuffisant par rapport aux objectifs",
+                "3": "Cohérence globale mais optimisation possible",
+                "4": "Investissement bien dimensionné et réparti",
+                "5": "Investissement optimal avec effet de levier maximisé"
+              }
+            },
+            {
+              "id": "Q1.4.3",
+              "text": "Avez-vous une approche portfolio pour optimiser vos investissements IA ?",
+              "notes": {
+                "1": "Approche projet isolé sans vision portfolio",
+                "2": "Tentative de coordination mais sans méthode formelle",
+                "3": "Approche portfolio basique avec priorisation simple",
+                "4": "Gestion portfolio mature avec optimisation risque/rendement",
+                "5": "Excellence portfolio avec innovation et arbitrages dynamiques"
+              }
+            },
+            {
+              "id": "Q1.4.4",
+              "text": "Suivez-vous l'évolution des coûts et l'efficacité de vos dépenses IA ?",
+              "notes": {
+                "1": "Pas de suivi des coûts IA, dépenses non tracées",
+                "2": "Suivi basique des dépenses principales",
+                "3": "Tableau de bord coûts avec analyse mensuelle",
+                "4": "Pilotage financier complet avec optimisation continue",
+                "5": "Excellence du pilotage avec prédiction et recommandations"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "DATA",
+      "weight_percent": 20,
+      "sub_axes": [
+        {
+          "id": "2.1",
+          "title": "Qualité & Gouvernance des Données",
+          "questions": [
+            {
+              "id": "Q2.1.1",
+              "text": "Avez-vous mis en place une gouvernance des données pour l'IA ?",
+              "notes": {
+                "1": "Aucune gouvernance data, gestion ad-hoc par projet",
+                "2": "Début de structuration avec quelques règles informelles",
+                "3": "Framework de gouvernance établi mais application partielle",
+                "4": "Gouvernance mature avec processus formalisés et contrôles",
+                "5": "Excellence en gouvernance avec automatisation et amélioration continue"
+              }
+            },
+            {
+              "id": "Q2.1.2",
+              "text": "Mesurez-vous et suivez-vous la qualité de vos données ?",
+              "notes": {
+                "1": "Pas de mesure de qualité, découverte des problèmes en production",
+                "2": "Contrôles ponctuels sur les données critiques",
+                "3": "Métriques qualité définies avec suivi régulier",
+                "4": "Monitoring qualité automatisé avec alertes et corrections",
+                "5": "Excellence qualité avec prédiction et amélioration proactive"
+              }
+            },
+            {
+              "id": "Q2.1.3",
+              "text": "Disposez-vous d'un catalogue de données pour faciliter leur découverte et utilisation ?",
+              "notes": {
+                "1": "Pas de catalogue, recherche manuelle et connaissance tacite",
+                "2": "Documentation basique dispersée dans différents outils",
+                "3": "Catalogue centralisé avec métadonnées de base",
+                "4": "Catalogue riche avec recherche avancée et lineage",
+                "5": "Data marketplace avec recommandations et auto-documentation"
+              }
+            },
+            {
+              "id": "Q2.1.4",
+              "text": "Avez-vous défini et appliqué des standards de données pour l'IA ?",
+              "notes": {
+                "1": "Pas de standards, formats et structures hétérogènes",
+                "2": "Quelques standards informels par équipe",
+                "3": "Standards documentés mais application incomplète",
+                "4": "Standards appliqués avec contrôles et outils d'enforcement",
+                "5": "Standards évolutifs avec automatisation et bonnes pratiques partagées"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2.2",
+          "title": "Infrastructure & Pipeline Data",
+          "questions": [
+            {
+              "id": "Q2.2.1",
+              "text": "Disposez-vous d'une architecture data moderne (Data Lake, Data Warehouse) ?",
+              "notes": {
+                "1": "Architecture traditionnelle, bases de données relationnelles seulement",
+                "2": "Migration en cours vers architectures modernes",
+                "3": "Architecture hybride avec Data Lake ou Data Warehouse",
+                "4": "Architecture complète et optimisée pour l'IA",
+                "5": "Architecture data de pointe avec fonctionnalités avancées"
+              }
+            },
+            {
+              "id": "Q2.2.2",
+              "text": "Avez-vous automatisé vos pipelines de données pour l'IA ?",
+              "notes": {
+                "1": "Processus manuels, extractions et transformations ponctuelles",
+                "2": "Quelques scripts d'automatisation basiques",
+                "3": "Pipelines automatisés pour les cas d'usage principaux",
+                "4": "Plateforme de pipelines robuste avec monitoring",
+                "5": "Pipelines intelligents avec auto-adaptation et optimisation"
+              }
+            },
+            {
+              "id": "Q2.2.3",
+              "text": "Gérez-vous efficacement les données en temps réel pour l'IA ?",
+              "notes": {
+                "1": "Pas de capacité temps réel, traitements batch uniquement",
+                "2": "Quelques flux temps réel pour des cas spécifiques",
+                "3": "Architecture streaming établie pour les besoins principaux",
+                "4": "Plateforme temps réel mature avec faible latence",
+                "5": "Capacités temps réel de pointe avec edge computing"
+              }
+            },
+            {
+              "id": "Q2.2.4",
+              "text": "Intégrez-vous facilement des sources de données externes pour enrichir vos modèles IA ?",
+              "notes": {
+                "1": "Intégration difficile, développements spécifiques pour chaque source",
+                "2": "Quelques connecteurs mais processus lourd",
+                "3": "Plateforme d'intégration avec connecteurs standards",
+                "4": "Intégration fluide avec marketplace de données",
+                "5": "Écosystème data ouvert avec partenariats et APIs"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2.3",
+          "title": "Analytics & Insights",
+          "questions": [
+            {
+              "id": "Q2.3.1",
+              "text": "Exploitez-vous vos données pour générer des insights business actionnables ?",
+              "notes": {
+                "1": "Données utilisées uniquement pour le reporting basique",
+                "2": "Quelques analyses ad-hoc sans processus structuré",
+                "3": "Analytics régulières avec insights partagés",
+                "4": "Plateforme d'analytics avancée avec insights automatisés",
+                "5": "Intelligence augmentée avec recommandations prédictives"
+              }
+            },
+            {
+              "id": "Q2.3.2",
+              "text": "Utilisez-vous l'analytics pour améliorer continuellement vos modèles IA ?",
+              "notes": {
+                "1": "Pas d'analytics sur les modèles, amélioration réactive",
+                "2": "Suivi basique des performances des modèles",
+                "3": "Analytics dédiées avec métriques d'amélioration",
+                "4": "Boucle de feedback automatisée pour l'optimisation",
+                "5": "Meta-learning avec amélioration autonome des modèles"
+              }
+            },
+            {
+              "id": "Q2.3.3",
+              "text": "Avez-vous démocratisé l'accès aux données et aux outils d'analyse dans votre organisation ?",
+              "notes": {
+                "1": "Accès limité aux experts techniques, silos de données",
+                "2": "Ouverture progressive avec outils basiques",
+                "3": "Plateforme self-service pour les utilisateurs métiers",
+                "4": "Démocratisation réussie avec formation et support",
+                "5": "Culture data-driven généralisée avec citizen data scientists"
+              }
+            },
+            {
+              "id": "Q2.3.4",
+              "text": "Vos analyses de données influencent-elles effectivement les décisions stratégiques ?",
+              "notes": {
+                "1": "Décisions basées sur l'intuition, données utilisées pour justifier",
+                "2": "Données consultées mais poids limité dans les décisions",
+                "3": "Analytics intégrées dans certains processus décisionnels",
+                "4": "Décisions systématiquement informées par les données",
+                "5": "Intelligence décisionnelle avec recommandations automatisées"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2.4",
+          "title": "Protection & Conformité",
+          "questions": [
+            {
+              "id": "Q2.4.1",
+              "text": "Respectez-vous les réglementations sur la protection des données (RGPD, etc.) dans vos projets IA ?",
+              "notes": {
+                "1": "Conformité limitée, approche réactive aux exigences légales",
+                "2": "Mise en conformité en cours avec les réglementations principales",
+                "3": "Conformité établie avec processus de contrôle",
+                "4": "Excellence en conformité avec anticipation des évolutions",
+                "5": "Leadership en privacy-by-design et conformité proactive"
+              }
+            },
+            {
+              "id": "Q2.4.2",
+              "text": "Avez-vous mis en place des mécanismes de pseudonymisation et d'anonymisation ?",
+              "notes": {
+                "1": "Pas de mécanismes formels, traitement des données brutes",
+                "2": "Techniques basiques appliquées ponctuellement",
+                "3": "Processus établis pour les données sensibles",
+                "4": "Techniques avancées avec validation de l'anonymisation",
+                "5": "Technologies de pointe avec privacy-preserving ML"
+              }
+            },
+            {
+              "id": "Q2.4.3",
+              "text": "Gérez-vous les droits d'accès et la traçabilité des utilisations de données ?",
+              "notes": {
+                "1": "Accès ouvert, pas de traçabilité des utilisations",
+                "2": "Contrôles d'accès basiques, logs limités",
+                "3": "Gestion des droits structurée avec audit trails",
+                "4": "Système complet avec traçabilité fine et alertes",
+                "5": "Plateforme de gouvernance avec IA pour la surveillance"
+              }
+            },
+            {
+              "id": "Q2.4.4",
+              "text": "Avez-vous prévu des mécanismes pour gérer les demandes de droit à l'oubli et de portabilité ?",
+              "notes": {
+                "1": "Pas de processus, gestion manuelle au cas par cas",
+                "2": "Processus basiques avec interventions techniques",
+                "3": "Processus formalisés avec outils dédiés",
+                "4": "Automatisation des demandes avec workflows intégrés",
+                "5": "Plateforme complète avec self-service utilisateur"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "TECHNOLOGIES",
+      "weight_percent": 18,
+      "sub_axes": [
+        {
+          "id": "3.1",
+          "title": "Plateforme & Outils IA/ML",
+          "questions": [
+            {
+              "id": "Q3.1.1",
+              "text": "Disposez-vous d'une plateforme IA/ML centralisée et intégrée ?",
+              "notes": {
+                "1": "Outils dispersés, environnements hétérogènes par projet",
+                "2": "Quelques outils communs mais pas de plateforme unifiée",
+                "3": "Plateforme établie couvrant les besoins principaux",
+                "4": "Plateforme complète et intégrée avec tous les outils nécessaires",
+                "5": "Plateforme de pointe avec capacités avancées et évolutivité"
+              }
+            },
+            {
+              "id": "Q3.1.2",
+              "text": "Utilisez-vous des outils AutoML pour accélérer le développement de modèles ?",
+              "notes": {
+                "1": "Développement entièrement manuel, pas d'automatisation",
+                "2": "Quelques scripts d'automatisation basiques",
+                "3": "Outils AutoML utilisés pour certains cas d'usage",
+                "4": "AutoML intégré dans les workflows standard",
+                "5": "Plateforme AutoML avancée avec optimisation automatique"
+              }
+            },
+            {
+              "id": "Q3.1.3",
+              "text": "Avez-vous standardisé vos environnements de développement IA ?",
+              "notes": {
+                "1": "Environnements hétérogènes, configuration manuelle",
+                "2": "Quelques standards mais application inconstante",
+                "3": "Environnements standardisés avec templates",
+                "4": "Environnements reproductibles avec conteneurs",
+                "5": "Infrastructure as Code avec provisioning automatique"
+              }
+            },
+            {
+              "id": "Q3.1.4",
+              "text": "Intégrez-vous des modèles pré-entraînés et des APIs IA externes ?",
+              "notes": {
+                "1": "Développement from scratch uniquement",
+                "2": "Utilisation ponctuelle de modèles pré-entraînés",
+                "3": "Stratégie buy vs build avec réutilisation",
+                "4": "Écosystème riche avec marketplace de modèles",
+                "5": "Plateforme hybride avec modèles propriétaires et externes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "3.2",
+          "title": "Développement & Modélisation",
+          "questions": [
+            {
+              "id": "Q3.2.1",
+              "text": "Suivez-vous des méthodologies structurées pour le développement IA (CRISP-DM, KDD, etc.) ?",
+              "notes": {
+                "1": "Approche ad-hoc sans méthodologie formelle",
+                "2": "Connaissance des méthodologies mais application partielle",
+                "3": "Méthodologie adoptée pour les projets principaux",
+                "4": "Méthodologie systématique avec adaptations contextuelles",
+                "5": "Méthodologie optimisée avec retours d'expérience et amélioration"
+              }
+            },
+            {
+              "id": "Q3.2.2",
+              "text": "Avez-vous mis en place un système de versioning pour vos modèles et expérimentations ?",
+              "notes": {
+                "1": "Pas de versioning, confusion entre versions de modèles",
+                "2": "Versioning basique avec nomenclature simple",
+                "3": "Système de versioning structuré avec métadonnées",
+                "4": "Plateforme complète avec tracking des expérimentations",
+                "5": "Système avancé avec reproductibilité et collaboration"
+              }
+            },
+            {
+              "id": "Q3.2.3",
+              "text": "Documentez-vous systématiquement vos modèles IA (architecture, paramètres, performances) ?",
+              "notes": {
+                "1": "Documentation minimale, connaissance tacite",
+                "2": "Documentation basique dans du code ou des notebooks",
+                "3": "Templates de documentation avec informations clés",
+                "4": "Documentation automatisée intégrée aux outils",
+                "5": "Documentation vivante avec model cards et explicabilité"
+              }
+            },
+            {
+              "id": "Q3.2.4",
+              "text": "Testez-vous rigoureusement vos modèles avant la mise en production ?",
+              "notes": {
+                "1": "Tests basiques sur jeu d'entraînement uniquement",
+                "2": "Validation sur jeu de test avec métriques simples",
+                "3": "Tests structurés avec plusieurs métriques et validation croisée",
+                "4": "Framework de tests complet avec benchmarks",
+                "5": "Tests automatisés avec simulation et stress testing"
+              }
+            }
+          ]
+        },
+        {
+          "id": "3.3",
+          "title": "Déploiement & MLOps",
+          "questions": [
+            {
+              "id": "Q3.3.1",
+              "text": "Avez-vous automatisé le déploiement de vos modèles IA en production ?",
+              "notes": {
+                "1": "Déploiement entièrement manuel avec interventions techniques",
+                "2": "Quelques scripts d'automatisation pour les déploiements",
+                "3": "Pipeline de déploiement automatisé pour les modèles principaux",
+                "4": "MLOps mature avec CI/CD intégré",
+                "5": "Plateforme MLOps avancée avec déploiement intelligent"
+              }
+            },
+            {
+              "id": "Q3.3.2",
+              "text": "Surveillez-vous la performance de vos modèles en production ?",
+              "notes": {
+                "1": "Pas de monitoring, découverte des problèmes par les utilisateurs",
+                "2": "Monitoring basique avec alertes simples",
+                "3": "Surveillance des métriques clés avec tableaux de bord",
+                "4": "Monitoring avancé avec détection d'anomalies",
+                "5": "Surveillance intelligente avec auto-correction"
+              }
+            },
+            {
+              "id": "Q3.3.3",
+              "text": "Gérez-vous le re-entraînement automatique de vos modèles ?",
+              "notes": {
+                "1": "Re-entraînement manuel et ponctuel",
+                "2": "Re-entraînement programmé à intervalles fixes",
+                "3": "Re-entraînement déclenché par des seuils de performance",
+                "4": "Système adaptatif avec re-entraînement intelligent",
+                "5": "Apprentissage continu avec optimisation automatique"
+              }
+            },
+            {
+              "id": "Q3.3.4",
+              "text": "Avez-vous mis en place des stratégies de rollback pour vos modèles IA ?",
+              "notes": {
+                "1": "Pas de stratégie de rollback, interventions manuelles",
+                "2": "Rollback manuel avec procédures documentées",
+                "3": "Rollback automatique basé sur des métriques",
+                "4": "Système de rollback sophistiqué avec canary deployments",
+                "5": "Rollback intelligent avec apprentissage des échecs"
+              }
+            }
+          ]
+        },
+        {
+          "id": "3.4",
+          "title": "Innovation & R&D",
+          "questions": [
+            {
+              "id": "Q3.4.1",
+              "text": "Expérimentez-vous avec les technologies IA émergentes ?",
+              "notes": {
+                "1": "Focus uniquement sur les technologies établies",
+                "2": "Veille technologique mais peu d'expérimentation",
+                "3": "POCs réguliers sur les innovations prometteuses",
+                "4": "Programme d'innovation structuré avec budget dédié",
+                "5": "Leadership en innovation avec contributions à l'écosystème"
+              }
+            },
+            {
+              "id": "Q3.4.2",
+              "text": "Collaborez-vous avec des centres de recherche ou des universités ?",
+              "notes": {
+                "1": "Aucune collaboration académique",
+                "2": "Contacts occasionnels avec le monde académique",
+                "3": "Partenariats établis avec quelques institutions",
+                "4": "Collaborations actives avec transfert technologique",
+                "5": "Écosystème d'innovation avec labs partenaires"
+              }
+            },
+            {
+              "id": "Q3.4.3",
+              "text": "Développez-vous des solutions IA propriétaires différenciatrices ?",
+              "notes": {
+                "1": "Utilisation uniquement de solutions standard du marché",
+                "2": "Quelques adaptations spécifiques mineures",
+                "3": "Développements propriétaires pour des besoins spécifiques",
+                "4": "Solutions différenciatrices avec avantage concurrentiel",
+                "5": "Innovation breakthrough avec propriété intellectuelle"
+              }
+            },
+            {
+              "id": "Q3.4.4",
+              "text": "Participez-vous à des communautés open source IA ?",
+              "notes": {
+                "1": "Consommation passive des outils open source",
+                "2": "Participation occasionnelle aux communautés",
+                "3": "Contributions régulières à certains projets",
+                "4": "Engagement actif avec leadership dans des projets",
+                "5": "Contributeur majeur avec projets open source propres"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "GOUVERNANCE",
+      "weight_percent": 15,
+      "sub_axes": [
+        {
+          "id": "4.1",
+          "title": "Éthique & IA Responsable",
+          "questions": [
+            {
+              "id": "Q4.1.1",
+              "text": "Avez-vous défini des principes éthiques pour l'utilisation de l'IA ?",
+              "notes": {
+                "1": "Aucun cadre éthique formalisé",
+                "2": "Sensibilisation aux enjeux éthiques sans cadre formel",
+                "3": "Charte éthique documentée et communiquée",
+                "4": "Principes éthiques intégrés aux processus de développement",
+                "5": "Leadership en IA éthique avec impact sociétal positif"
+              }
+            },
+            {
+              "id": "Q4.1.2",
+              "text": "Évaluez-vous les biais potentiels de vos modèles IA ?",
+              "notes": {
+                "1": "Pas d'évaluation systématique des biais",
+                "2": "Sensibilisation aux biais mais tests ponctuels",
+                "3": "Tests de biais intégrés dans les processus de validation",
+                "4": "Framework complet d'évaluation et de mitigation des biais",
+                "5": "Détection et correction automatique des biais"
+              }
+            },
+            {
+              "id": "Q4.1.3",
+              "text": "Assurez-vous la transparence et l'explicabilité de vos modèles IA ?",
+              "notes": {
+                "1": "Modèles \"boîte noire\" sans explicabilité",
+                "2": "Documentation basique du fonctionnement des modèles",
+                "3": "Outils d'explicabilité pour les cas d'usage critiques",
+                "4": "Explicabilité systématique avec outils avancés",
+                "5": "IA explicable par design avec interface utilisateur intuitive"
+              }
+            },
+            {
+              "id": "Q4.1.4",
+              "text": "Avez-vous mis en place un comité éthique IA ou une gouvernance dédiée ?",
+              "notes": {
+                "1": "Pas de gouvernance éthique spécifique",
+                "2": "Référents éthiques informels dans les équipes",
+                "3": "Comité éthique établi avec missions définies",
+                "4": "Gouvernance éthique intégrée aux processus décisionnels",
+                "5": "Excellence en gouvernance éthique avec influence sectorielle"
+              }
+            }
+          ]
+        },
+        {
+          "id": "4.2",
+          "title": "Gestion des Risques",
+          "questions": [
+            {
+              "id": "Q4.2.1",
+              "text": "Avez-vous identifié et évalué les risques liés à vos projets IA ?",
+              "notes": {
+                "1": "Pas d'identification systématique des risques IA",
+                "2": "Identification basique des risques techniques",
+                "3": "Cartographie des risques avec évaluation d'impact",
+                "4": "Gestion des risques intégrée aux processus projet",
+                "5": "Système de gestion des risques prédictif et adaptatif"
+              }
+            },
+            {
+              "id": "Q4.2.2",
+              "text": "Avez-vous des plans de contingence en cas de défaillance des systèmes IA ?",
+              "notes": {
+                "1": "Pas de plan de contingence, gestion réactive",
+                "2": "Procédures basiques pour les pannes système",
+                "3": "Plans de contingence documentés et testés",
+                "4": "Système de failover automatique avec plans détaillés",
+                "5": "Résilience by design avec auto-récupération"
+              }
+            },
+            {
+              "id": "Q4.2.3",
+              "text": "Surveillez-vous les risques de sécurité spécifiques à l'IA (adversarial attacks, etc.) ?",
+              "notes": {
+                "1": "Pas de surveillance spécifique aux menaces IA",
+                "2": "Sensibilisation aux menaces mais protection basique",
+                "3": "Détection et protection contre les attaques courantes",
+                "4": "Système de défense avancé contre les attaques IA",
+                "5": "Sécurité IA proactive avec threat intelligence"
+              }
+            },
+            {
+              "id": "Q4.2.4",
+              "text": "Avez-vous défini des seuils d'alerte et d'intervention pour vos systèmes IA ?",
+              "notes": {
+                "1": "Pas de seuils définis, intervention manuelle",
+                "2": "Quelques seuils basiques avec alertes simples",
+                "3": "Système d'alertes structuré avec escalade",
+                "4": "Monitoring sophistiqué avec seuils dynamiques",
+                "5": "Système prédictif avec intervention préventive"
+              }
+            }
+          ]
+        },
+        {
+          "id": "4.3",
+          "title": "Compliance & Réglementation",
+          "questions": [
+            {
+              "id": "Q4.3.1",
+              "text": "Suivez-vous l'évolution des réglementations IA (EU AI Act, etc.) ?",
+              "notes": {
+                "1": "Pas de veille réglementaire spécifique à l'IA",
+                "2": "Veille occasionnelle sur les évolutions majeures",
+                "3": "Veille structurée avec analyse d'impact",
+                "4": "Anticipation proactive des évolutions réglementaires",
+                "5": "Leadership en compliance avec influence sur les standards"
+              }
+            },
+            {
+              "id": "Q4.3.2",
+              "text": "Vos systèmes IA respectent-ils les exigences sectorielles spécifiques ?",
+              "notes": {
+                "1": "Pas de prise en compte des spécificités sectorielles",
+                "2": "Conformité basique aux exigences principales",
+                "3": "Compliance établie avec processus de validation",
+                "4": "Excellence en conformité sectorielle",
+                "5": "Leadership sectoriel avec standards dépassés"
+              }
+            },
+            {
+              "id": "Q4.3.3",
+              "text": "Documentez-vous vos systèmes IA pour faciliter les audits de conformité ?",
+              "notes": {
+                "1": "Documentation minimale, audits difficiles",
+                "2": "Documentation basique des systèmes principaux",
+                "3": "Documentation structurée selon les exigences d'audit",
+                "4": "Documentation complète avec traçabilité totale",
+                "5": "Documentation automatisée avec audit trail complet"
+              }
+            },
+            {
+              "id": "Q4.3.4",
+              "text": "Avez-vous mis en place des processus de certification pour vos systèmes IA critiques ?",
+              "notes": {
+                "1": "Pas de processus de certification formalisé",
+                "2": "Validation interne selon des critères basiques",
+                "3": "Processus de certification établi pour les systèmes critiques",
+                "4": "Certification externe par organismes reconnus",
+                "5": "Excellence en certification avec standards dépassés"
+              }
+            }
+          ]
+        },
+        {
+          "id": "4.4",
+          "title": "Processus & Validation",
+          "questions": [
+            {
+              "id": "Q4.4.1",
+              "text": "Avez-vous défini des processus de validation pour vos projets IA ?",
+              "notes": {
+                "1": "Pas de processus de validation formalisé",
+                "2": "Validation basique par les équipes techniques",
+                "3": "Processus de validation structuré avec critères définis",
+                "4": "Validation multi-niveaux avec comité dédié",
+                "5": "Excellence en validation avec amélioration continue"
+              }
+            },
+            {
+              "id": "Q4.4.2",
+              "text": "Impliquez-vous les utilisateurs finaux dans la validation de vos systèmes IA ?",
+              "notes": {
+                "1": "Validation uniquement technique sans implication utilisateurs",
+                "2": "Feedback utilisateurs collecté ponctuellement",
+                "3": "Tests utilisateurs intégrés dans le processus de validation",
+                "4": "Co-conception avec utilisateurs et validation continue",
+                "5": "Excellence en UX avec feedback loop automatisé"
+              }
+            },
+            {
+              "id": "Q4.4.3",
+              "text": "Tracez-vous les décisions et modifications apportées à vos modèles IA ?",
+              "notes": {
+                "1": "Pas de traçabilité des décisions et modifications",
+                "2": "Documentation basique des changements majeurs",
+                "3": "Système de traçabilité établi avec historique",
+                "4": "Traçabilité complète avec audit trail automatisé",
+                "5": "Système de traçabilité intelligent avec analyse d'impact"
+              }
+            },
+            {
+              "id": "Q4.4.4",
+              "text": "Réalisez-vous des audits réguliers de vos systèmes IA ?",
+              "notes": {
+                "1": "Pas d'audit systématique des systèmes IA",
+                "2": "Audits ponctuels en cas de problème",
+                "3": "Audits planifiés avec checklist standardisée",
+                "4": "Programme d'audit complet avec suivi des actions",
+                "5": "Audit continu avec amélioration automatique"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "CULTURE ORGANISATIONNELLE",
+      "weight_percent": 12,
+      "sub_axes": [
+        {
+          "id": "5.1",
+          "title": "Compétences & Formation",
+          "questions": [
+            {
+              "id": "Q5.1.1",
+              "text": "Avez-vous cartographié les compétences IA nécessaires dans votre organisation ?",
+              "notes": {
+                "1": "Aucune cartographie des compétences IA",
+                "2": "Identification basique des compétences techniques",
+                "3": "Cartographie structurée avec gaps analysis",
+                "4": "Référentiel complet avec plans de développement",
+                "5": "Système dynamique avec prédiction des besoins futurs"
+              }
+            },
+            {
+              "id": "Q5.1.2",
+              "text": "Proposez-vous des formations IA adaptées aux différents profils de votre organisation ?",
+              "notes": {
+                "1": "Pas de programme de formation IA spécifique",
+                "2": "Formations ponctuelles pour les équipes techniques",
+                "3": "Programme de formation différencié par profils",
+                "4": "Cursus complets avec certifications internes",
+                "5": "Université interne IA avec parcours personnalisés"
+              }
+            },
+            {
+              "id": "Q5.1.3",
+              "text": "Encouragez-vous l'acquisition de certifications IA par vos collaborateurs ?",
+              "notes": {
+                "1": "Pas d'encouragement aux certifications IA",
+                "2": "Support ponctuel pour quelques collaborateurs",
+                "3": "Programme de certification avec budget dédié",
+                "4": "Incitation forte avec reconnaissance et évolution",
+                "5": "Excellence en certification avec partenariats académiques"
+              }
+            },
+            {
+              "id": "Q5.1.4",
+              "text": "Avez-vous identifié et développé des profils \"IA champions\" dans votre organisation ?",
+              "notes": {
+                "1": "Pas d'identification de champions IA",
+                "2": "Quelques experts IA reconnus informellement",
+                "3": "Réseau de champions IA avec missions définies",
+                "4": "Programme structuré avec formation et accompagnement",
+                "5": "Communauté d'experts avec influence stratégique"
+              }
+            }
+          ]
+        },
+        {
+          "id": "5.2",
+          "title": "Adoption & Change Management",
+          "questions": [
+            {
+              "id": "Q5.2.1",
+              "text": "Avez-vous une stratégie de conduite du changement pour l'adoption de l'IA ?",
+              "notes": {
+                "1": "Pas de stratégie de change management pour l'IA",
+                "2": "Approche réactive avec gestion des résistances",
+                "3": "Plan de conduite du changement structuré",
+                "4": "Programme complet avec accompagnement personnalisé",
+                "5": "Excellence en transformation avec culture d'innovation"
+              }
+            },
+            {
+              "id": "Q5.2.2",
+              "text": "Mesurez-vous l'adoption et l'usage des solutions IA par vos collaborateurs ?",
+              "notes": {
+                "1": "Pas de mesure de l'adoption des solutions IA",
+                "2": "Suivi basique de l'utilisation des outils",
+                "3": "Métriques d'adoption avec analyse des usages",
+                "4": "Dashboard complet avec actions d'amélioration",
+                "5": "Analytics avancées avec recommandations personnalisées"
+              }
+            },
+            {
+              "id": "Q5.2.3",
+              "text": "Communiquez-vous régulièrement sur les succès et bénéfices de l'IA ?",
+              "notes": {
+                "1": "Communication limitée sur les projets IA",
+                "2": "Partage ponctuel des réussites techniques",
+                "3": "Communication régulière avec exemples concrets",
+                "4": "Programme de communication multi-canal",
+                "5": "Storytelling inspirant avec impact business démontré"
+              }
+            },
+            {
+              "id": "Q5.2.4",
+              "text": "Accompagnez-vous les collaborateurs dans l'évolution de leurs missions avec l'IA ?",
+              "notes": {
+                "1": "Pas d'accompagnement spécifique à l'évolution des rôles",
+                "2": "Support ponctuel en cas de difficultés",
+                "3": "Programme d'accompagnement pour les rôles impactés",
+                "4": "Requalification proactive avec nouveaux parcours",
+                "5": "Transformation des métiers avec co-création"
+              }
+            }
+          ]
+        },
+        {
+          "id": "5.3",
+          "title": "Collaboration & Équipes",
+          "questions": [
+            {
+              "id": "Q5.3.1",
+              "text": "Avez-vous constitué des équipes pluridisciplinaires pour vos projets IA ?",
+              "notes": {
+                "1": "Équipes uniquement techniques travaillant en silos",
+                "2": "Collaboration ponctuelle avec les métiers",
+                "3": "Équipes mixtes avec profils business et techniques",
+                "4": "Squads autonomes avec toutes les compétences",
+                "5": "Organisation agile avec cellules d'innovation"
+              }
+            },
+            {
+              "id": "Q5.3.2",
+              "text": "Favorisez-vous le partage de connaissances et d'expériences IA dans l'organisation ?",
+              "notes": {
+                "1": "Pas de partage structuré des connaissances IA",
+                "2": "Échanges informels entre équipes techniques",
+                "3": "Sessions de partage régulières et documentées",
+                "4": "Plateforme collaborative avec base de connaissances",
+                "5": "Écosystème d'apprentissage avec communautés actives"
+              }
+            },
+            {
+              "id": "Q5.3.3",
+              "text": "Organisez-vous des événements internes IA (hackathons, conférences, etc.) ?",
+              "notes": {
+                "1": "Pas d'événements dédiés à l'IA",
+                "2": "Quelques présentations dans des événements génériques",
+                "3": "Événements IA réguliers avec participation active",
+                "4": "Programme d'événements structuré avec concours",
+                "5": "Écosystème d'innovation avec événements inspirants"
+              }
+            },
+            {
+              "id": "Q5.3.4",
+              "text": "Encouragez-vous l'expérimentation et le droit à l'erreur dans vos projets IA ?",
+              "notes": {
+                "1": "Culture risque-averse, pas de tolérance à l'échec",
+                "2": "Acceptation limitée des échecs d'apprentissage",
+                "3": "Encouragement de l'expérimentation avec budget dédié",
+                "4": "Culture du \"fail fast\" avec apprentissage systématique",
+                "5": "Innovation continue avec célébration des échecs formateurs"
+              }
+            }
+          ]
+        },
+        {
+          "id": "5.4",
+          "title": "Leadership & Sponsoring",
+          "questions": [
+            {
+              "id": "Q5.4.1",
+              "text": "Le leadership de votre organisation démontre-t-il un engagement visible pour l'IA ?",
+              "notes": {
+                "1": "Pas d'engagement visible du leadership",
+                "2": "Soutien passif avec allocation de ressources minimales",
+                "3": "Engagement affiché avec communication régulière",
+                "4": "Leadership actif avec participation aux projets",
+                "5": "Évangélisation IA avec influence sectorielle"
+              }
+            },
+            {
+              "id": "Q5.4.2",
+              "text": "Avez-vous nommé un Chief AI Officer ou un responsable IA dédié ?",
+              "notes": {
+                "1": "Pas de responsable IA identifié",
+                "2": "Responsabilité IA partagée entre plusieurs rôles",
+                "3": "Responsable IA nommé avec missions définies",
+                "4": "Chief AI Officer avec autorité et budget",
+                "5": "Leadership IA stratégique avec influence C-level"
+              }
+            },
+            {
+              "id": "Q5.4.3",
+              "text": "Les managers intermédiaires sont-ils formés et engagés dans la transformation IA ?",
+              "notes": {
+                "1": "Managers non impliqués dans la transformation IA",
+                "2": "Sensibilisation basique sans engagement actif",
+                "3": "Formation des managers avec rôle défini",
+                "4": "Managers comme ambassadeurs de la transformation",
+                "5": "Leadership distribué avec excellence managériale"
+              }
+            },
+            {
+              "id": "Q5.4.4",
+              "text": "Intégrez-vous des objectifs IA dans les évaluations de performance ?",
+              "notes": {
+                "1": "Pas d'objectifs IA dans les évaluations",
+                "2": "Objectifs IA pour les équipes techniques uniquement",
+                "3": "Objectifs IA intégrés pour les managers",
+                "4": "Objectifs IA cascadés dans toute l'organisation",
+                "5": "Culture de performance IA avec reconnaissance"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "INFRASTRUCTURE",
+      "weight_percent": 10,
+      "sub_axes": [
+        {
+          "id": "6.1",
+          "title": "Architecture & Cloud",
+          "questions": [
+            {
+              "id": "Q6.1.1",
+              "text": "Disposez-vous d'une infrastructure cloud adaptée aux charges de travail IA ?",
+              "notes": {
+                "1": "Infrastructure on-premise traditionnelle, pas de cloud",
+                "2": "Migration cloud en cours, ressources limitées pour l'IA",
+                "3": "Infrastructure cloud de base avec quelques services IA",
+                "4": "Infrastructure cloud optimisée pour l'IA avec services managés",
+                "5": "Infrastructure cloud native IA avec auto-scaling et edge computing"
+              }
+            },
+            {
+              "id": "Q6.1.2",
+              "text": "Votre architecture supporte-t-elle le déploiement et la gestion de microservices IA ?",
+              "notes": {
+                "1": "Architecture monolithique, pas de microservices",
+                "2": "Début de migration vers microservices",
+                "3": "Architecture microservices établie pour certaines applications",
+                "4": "Plateforme microservices mature avec orchestration",
+                "5": "Architecture cloud-native avec service mesh avancé"
+              }
+            },
+            {
+              "id": "Q6.1.3",
+              "text": "Utilisez-vous la conteneurisation (Docker, Kubernetes) pour vos déploiements IA ?",
+              "notes": {
+                "1": "Déploiements traditionnels sur serveurs dédiés",
+                "2": "Utilisation basique de conteneurs pour certains projets",
+                "3": "Conteneurisation systématique avec orchestration Kubernetes",
+                "4": "Plateforme Kubernetes mature avec CI/CD intégré",
+                "5": "Orchestration avancée avec operators personnalisés"
+              }
+            },
+            {
+              "id": "Q6.1.4",
+              "text": "Avez-vous intégré des capacités edge computing pour l'IA ?",
+              "notes": {
+                "1": "Traitement centralisé uniquement, pas d'edge computing",
+                "2": "Quelques déploiements edge pour des cas spécifiques",
+                "3": "Architecture edge établie avec synchronisation cloud",
+                "4": "Plateforme edge/cloud hybride optimisée",
+                "5": "Edge computing intelligent avec IA fédérée"
+              }
+            }
+          ]
+        },
+        {
+          "id": "6.2",
+          "title": "Sécurité & Protection",
+          "questions": [
+            {
+              "id": "Q6.2.1",
+              "text": "Avez-vous sécurisé vos modèles IA contre les attaques adverses ?",
+              "notes": {
+                "1": "Pas de protection spécifique contre les attaques IA",
+                "2": "Sensibilisation aux menaces mais protection basique",
+                "3": "Mécanismes de protection contre les attaques courantes",
+                "4": "Système de défense avancé avec détection d'anomalies",
+                "5": "Protection proactive avec IA défensive"
+              }
+            },
+            {
+              "id": "Q6.2.2",
+              "text": "Chiffrez-vous et protégez-vous vos algorithmes et données sensibles ?",
+              "notes": {
+                "1": "Protection basique, données en clair",
+                "2": "Chiffrement des données au repos et en transit",
+                "3": "Chiffrement avancé avec gestion de clés",
+                "4": "Protection des algorithmes avec enclaves sécurisées",
+                "5": "Chiffrement homomorphe et privacy-preserving ML"
+              }
+            },
+            {
+              "id": "Q6.2.3",
+              "text": "Gérez-vous les accès et permissions aux ressources IA de manière granulaire ?",
+              "notes": {
+                "1": "Gestion des accès basique, permissions larges",
+                "2": "Contrôle d'accès par rôles simples",
+                "3": "RBAC avec permissions granulaires",
+                "4": "ABAC avec politiques contextuelles",
+                "5": "Zero Trust avec contrôle d'accès intelligent"
+              }
+            },
+            {
+              "id": "Q6.2.4",
+              "text": "Auditez-vous et tracez-vous toutes les opérations sur vos systèmes IA ?",
+              "notes": {
+                "1": "Pas de traçabilité des opérations IA",
+                "2": "Logs basiques des actions principales",
+                "3": "Audit trail complet avec horodatage",
+                "4": "Système d'audit avancé avec alertes",
+                "5": "Traçabilité blockchain avec immutabilité"
+              }
+            }
+          ]
+        },
+        {
+          "id": "6.3",
+          "title": "Performance & Scalabilité",
+          "questions": [
+            {
+              "id": "Q6.3.1",
+              "text": "Disposez-vous de ressources de calcul dédiées IA (GPU, TPU) ?",
+              "notes": {
+                "1": "Calcul sur CPU uniquement, pas de ressources spécialisées",
+                "2": "Quelques GPU pour les projets principaux",
+                "3": "Pool de GPU avec allocation dynamique",
+                "4": "Infrastructure GPU/TPU optimisée avec monitoring",
+                "5": "Calcul haute performance avec accelerateurs spécialisés"
+              }
+            },
+            {
+              "id": "Q6.3.2",
+              "text": "Votre infrastructure supporte-t-elle l'auto-scaling pour les charges variables IA ?",
+              "notes": {
+                "1": "Capacité fixe, pas d'adaptation à la charge",
+                "2": "Scaling manuel selon les besoins",
+                "3": "Auto-scaling basique sur métriques système",
+                "4": "Auto-scaling intelligent avec prédiction",
+                "5": "Scaling optimal avec IA pour l'infrastructure"
+              }
+            },
+            {
+              "id": "Q6.3.3",
+              "text": "Comment gérez-vous l'optimisation des performances des modèles IA ?",
+              "notes": {
+                "1": "Aucune optimisation, modèles en l'état",
+                "2": "Optimisation manuelle ponctuelle",
+                "3": "Quelques techniques d'optimisation (quantification, pruning)",
+                "4": "Pipeline d'optimisation automatisé (compression, accélération)",
+                "5": "Optimisation avancée avec hardware spécialisé et techniques edge"
+              }
+            },
+            {
+              "id": "Q6.3.4",
+              "text": "Gérez-vous efficacement les pics de charge et la montée en charge ?",
+              "notes": {
+                "1": "Problèmes fréquents lors des pics, pas de gestion",
+                "2": "Gestion réactive des pics avec interventions manuelles",
+                "3": "Mécanismes de base pour absorber les pics",
+                "4": "Gestion proactive avec load balancing et mise en cache",
+                "5": "Architecture résiliente avec CDN et edge computing"
+              }
+            }
+          ]
+        },
+        {
+          "id": "6.4",
+          "title": "Monitoring & Observabilité (4 questions)",
+          "questions": [
+            {
+              "id": "Q6.4.1",
+              "text": "Surveillez-vous en temps réel les performances de vos modèles IA en production ?",
+              "notes": {
+                "1": "Aucun monitoring des modèles déployés",
+                "2": "Surveillance basique des erreurs système",
+                "3": "Monitoring des métriques de performance de base",
+                "4": "Monitoring complet avec tableaux de bord temps réel",
+                "5": "Observabilité avancée avec IA pour prédire les pannes"
+              }
+            },
+            {
+              "id": "Q6.4.2",
+              "text": "Détectez-vous automatiquement la dérive des modèles (model drift) ?",
+              "notes": {
+                "1": "Aucune détection de dérive, découverte manuelle",
+                "2": "Vérifications manuelles périodiques de la performance",
+                "3": "Alertes basiques sur la dégradation des métriques",
+                "4": "Détection automatique de dérive avec seuils adaptatifs",
+                "5": "Système avancé avec re-entraînement automatique"
+              }
+            },
+            {
+              "id": "Q6.4.3",
+              "text": "Avez-vous un système d'alerting et de gestion d'incidents pour l'IA ?",
+              "notes": {
+                "1": "Pas d'alerting spécifique aux systèmes IA",
+                "2": "Alertes basiques sur la disponibilité des services",
+                "3": "Alerting sur les métriques clés avec escalade manuelle",
+                "4": "Système d'alerting intelligent avec automatisation partielle",
+                "5": "Gestion d'incidents autonome avec auto-remédiation"
+              }
+            },
+            {
+              "id": "Q6.4.4",
+              "text": "Disposez-vous d'une observabilité complète de vos pipelines ML ?",
+              "notes": {
+                "1": "Aucune visibilité sur les pipelines ML",
+                "2": "Logs basiques sans corrélation",
+                "3": "Traçabilité partielle des étapes du pipeline",
+                "4": "Observabilité complète avec métriques et traces",
+                "5": "Observabilité intelligente avec analyse des dépendances"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

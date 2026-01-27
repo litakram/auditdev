@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit de Maturité IA - Framework d'Évaluation</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/loader.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="header-container">
+            <div class="header-brand">
+                <img src="/assets/images/ai-crafters-logo-b.png.webp" alt="AI Crafters Logo" class="logo">
+            </div>
+            <div class="header-actions">
+                <!-- Theme Switcher removed -->
+
+                <!-- Importer button removed -->
+                <button class="btn btn-primary" onclick="showView('overview')" aria-label="Retour à l'aperçu">
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                    Accueil
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container" role="main">
+        <!-- Overview View -->
+        <section id="overview" class="view active" aria-labelledby="overview-title">
+            <!-- Hero Section -->
+
+            <div class="hero-bg" id="hero-section" style="display: block;">
+                <div class="hero-content">
+                    <div class="hero-text-column">
+                        <h1 class="hero-title">
+                            <i class="fas fa-brain title-icon" aria-hidden="true"></i>
+                            Audit de Maturité IA
+                        </h1>
+                        <p class="hero-subtitle">Framework d'évaluation de la maturité IA - 6 axes d'analyse</p>
+                        <div class="hero-description">
+                            <p>Évaluez la maturité IA de votre organisation à travers <strong>6 dimensions clés</strong>
+                                et recevez des recommandations personnalisées basées sur l'intelligence artificielle.
+                                Notre outil d'audit vous aide à identifier vos forces, vos faiblesses et les
+                                opportunités d'amélioration pour optimiser votre stratégie IA.</p>
+                            <p>En moins de 15 minutes, obtenez une analyse complète de votre maturité IA actuelle et une
+                                feuille de route pour progresser.</p>
+                        </div>
+                        <div class="hero-features">
+                            <span class="hero-feature-badge"><i class="fas fa-check-circle"></i> Analyse rapide</span>
+                            <span class="hero-feature-badge"><i class="fas fa-check-circle"></i> IA explicable</span>
+                            <span class="hero-feature-badge"><i class="fas fa-check-circle"></i> Résultats
+                                instantanés</span>
+                        </div>
+                        <div class="hero-buttons">
+                            <button class="hero-button-primary" onclick="startNewAudit()">
+                                <i class="fas fa-play-circle hero-icon" aria-hidden="true"></i>
+                                Commencer l'Audit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-image-column">
+                        <div class="image-container">
+                            <img src="/assets/images/hero-image.png" alt="AI Maturity Audit Illustration"
+                                class="hero-illustration">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Section (hidden initially) -->
+            <div class="kpi-section" id="kpi-section" style="display: none;">
+                <div style="text-align: center; margin-bottom: var(--space-6);">
+                    <h1 class="hero-title">
+                        <i class="fas fa-brain title-icon" aria-hidden="true"></i>
+                        Audit de Maturité IA
+                    </h1>
+                    <p class="hero-subtitle">Framework d'évaluation de la maturité IA - 6 axes d'analyse</p>
+                </div>
+                <h3 class="section-title">Votre Progression</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-tasks" aria-hidden="true"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <div class="kpi-value" id="completion-rate">0%</div>
+                            <div class="kpi-label">Complété</div>
+                            <div class="kpi-sublabel">96 questions</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-clock" aria-hidden="true"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <div class="kpi-value" id="last-update">Jamais</div>
+                            <div class="kpi-label">Dernière MAJ</div>
+                            <div class="kpi-sublabel">Sauvegarde auto</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <div class="kpi-value" id="best-axis">-</div>
+                            <div class="kpi-label">Meilleur Axe</div>
+                            <div class="kpi-sublabel">Point fort</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Button -->
+                <div class="actions-section">
+                    <button class="action-card" onclick="startNewAudit()" aria-describedby="start-audit-desc" style="max-width: 450px; margin: 0 auto; border-radius: 12px;">
+                        <i class="fas fa-play-circle hero-icon" aria-hidden="true"></i>
+                        <div class="action-content">
+                            <h4 class="action-title">Continuer l'Audit</h4>
+                            <p id="start-audit-desc" class="action-description" style="color: #000000;">Reprendre l'évaluation de maturité IA
+                            </p>
+                        </div>
+                        <i class="fas fa-arrow-right action-arrow" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audit View -->
+        <section id="audit" class="view" aria-labelledby="audit-title">
+            <div class="audit-layout">
+                <!-- Sidebar Navigation -->
+                <nav class="audit-sidebar" role="navigation" aria-label="Navigation de l'audit">
+                    <div class="sidebar-header">
+                        <h3 class="sidebar-title">Progression</h3>
+                        <div class="progress-summary">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="overall-progress"></div>
+                            </div>
+                            <span class="progress-text" id="progress-text">0/96 questions</span>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-nav" id="audit-nav">
+                        <!-- Navigation items will be generated by JavaScript -->
+                    </div>
+                </nav>
+
+                <!-- Main Content -->
+                <div class="audit-content">
+                    <div class="content-header">
+                        <div class="breadcrumb" role="navigation" aria-label="Fil d'Ariane">
+                            <span class="breadcrumb-item">Audit</span>
+                            <i class="fas fa-chevron-right breadcrumb-separator" aria-hidden="true"></i>
+                            <span class="breadcrumb-item current" id="current-axis">Stratégie IA</span>
+                        </div>
+                        <button class="btn btn-ghost" onclick="showView('overview')"
+                            aria-label="Retour au tableau de bord">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div class="axis-content" id="axis-content">
+                        <!-- Axis content will be generated by JavaScript -->
+                    </div>
+
+                    <div class="content-footer">
+                        <button class="btn btn-secondary" id="prev-btn" onclick="navigateAxis(-1)" disabled>
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                            Précédent
+                        </button>
+                        <button class="btn btn-primary" id="next-btn" onclick="navigateAxis(1)">
+                            Suivant
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Review View -->
+        <section id="review" class="view" aria-labelledby="review-title">
+            <div class="review-header">
+                <h2 id="review-title" class="view-title">
+                    <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+                    Révision des Résultats
+                </h2>
+                <p class="view-subtitle">Vérifiez vos résultats avant de générer le rapport final</p>
+                <div class="review-instructions">
+                    <p aria-label="Explication des couleurs des résultats">Les résultats sont affichés avec quatre couleurs pour indiquer le niveau de maturité :</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div>
+                            <span class="color-box" style="background: #22c55e; display: inline-block; width: 24px; height: 16px; border-radius: 4px; margin-right: 8px; vertical-align: middle;" aria-label="Succès"></span>
+                            <strong> Niveau élevé :</strong> vos réponses indiquent une bonne maîtrise de cet axe.
+                        </div>
+                        <div>
+                            <span class="color-box" style="background: #3b82f6; display: inline-block; width: 24px; height: 16px; border-radius: 4px; margin-right: 8px; vertical-align: middle;" aria-label="Attention"></span>
+                            <strong> Niveau moyen :</strong> des améliorations sont possibles sur cet axe.
+                        </div>
+                        <div>
+                            <span class="color-box" style="background: #f59e0b; display: inline-block; width: 24px; height: 16px; border-radius: 4px; margin-right: 8px; vertical-align: middle;" aria-label="Attention"></span>
+                            <strong> Niveau faible :</strong> cet axe nécessite une attention particulière.
+                        </div>
+                        <div>
+                            <span class="color-box" style="background: #f41111; display: inline-block; width: 24px; height: 16px; border-radius: 4px; margin-right: 8px; vertical-align: middle;" aria-label="Erreur"></span>
+                            <strong> Niveau critique :</strong> cet axe nécessite une intervention immédiate.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="review-content" id="review-content">
+                <!-- Review content will be generated by JavaScript -->
+            </div>
+
+            <div class="review-actions">
+                <button class="btn btn-secondary" onclick="showView('audit')">
+                    <i class="fas fa-edit" aria-hidden="true"></i>
+                    Modifier les Réponses
+                </button>
+                <button class="btn btn-primary" onclick="validateAndProceed()">
+                    Générer le Rapport
+                    <i class="fas fa-chart-line" aria-hidden="true"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Insights View -->
+        <section id="insights" class="view" aria-labelledby="insights-title">
+           
+
+            <!-- Company Info Form -->
+            <div class="company-info-section" id="company-info-section">
+                <div class="info-card">
+                    <h3 class="card-title">
+                        <i class="fas fa-building" aria-hidden="true"></i>
+                        Informations de l'Entreprise
+                    </h3>
+                    <p class="card-subtitle">Complétez ces informations pour personnaliser votre rapport</p>
+
+                    <form class="company-form" id="company-form">
+                        <div class="form-group">
+                            <label for="company-name" class="form-label required">Nom de l'entreprise</label>
+                            <input type="text" id="company-name" class="form-input"
+                                placeholder="Entrez le nom de l'entreprise" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company-description" class="form-label">Description de l'entreprise</label>
+                            <textarea id="company-description" class="form-textarea"
+                                placeholder="Décrivez brièvement l'activité et la mission de votre entreprise..."></textarea>
+                        </div>
+                        <!-- numero de téléphone -->
+                           <div class="form-group">
+                            <label for="company-phone" class="form-label">Numéro de téléphone</label>
+                            <div class="phone-input-container" style="display: flex; gap: 8px; ">
+                                <select id="company-phone-code" class="form-select dd" >
+                                    <option value="+33" selected>🇫🇷 +33</option>
+                                    <option value="+93">🇦🇫 +93</option>
+                                    <option value="+355">🇦🇱 +355</option>
+                                    <option value="+213">🇩🇿 +213</option>
+                                    <option value="+376">🇦🇩 +376</option>
+                                    <option value="+244">🇦🇴 +244</option>
+                                    <option value="+54">🇦🇷 +54</option>
+                                    <option value="+374">🇦🇲 +374</option>
+                                    <option value="+61">🇦🇺 +61</option>
+                                    <option value="+43">🇦🇹 +43</option>
+                                    <option value="+994">🇦🇿 +994</option>
+                                    <option value="+973">🇧🇭 +973</option>
+                                    <option value="+880">🇧🇩 +880</option>
+                                    <option value="+375">🇧🇾 +375</option>
+                                    <option value="+32">🇧🇪 +32</option>
+                                    <option value="+501">🇧🇿 +501</option>
+                                    <option value="+229">🇧🇯 +229</option>
+                                    <option value="+975">🇧🇹 +975</option>
+                                    <option value="+591">🇧🇴 +591</option>
+                                    <option value="+387">🇧🇦 +387</option>
+                                    <option value="+267">🇧🇼 +267</option>
+                                    <option value="+55">🇧🇷 +55</option>
+                                    <option value="+673">🇧🇳 +673</option>
+                                    <option value="+359">🇧🇬 +359</option>
+                                    <option value="+226">🇧🇫 +226</option>
+                                    <option value="+257">🇧🇮 +257</option>
+                                    <option value="+855">🇰🇭 +855</option>
+                                    <option value="+237">🇨🇲 +237</option>
+                                    <option value="+1">🇨🇦 +1</option>
+                                    <option value="+238">🇨🇻 +238</option>
+                                    <option value="+236">🇨🇫 +236</option>
+                                    <option value="+235">🇹🇩 +235</option>
+                                    <option value="+56">🇨🇱 +56</option>
+                                    <option value="+86">🇨🇳 +86</option>
+                                    <option value="+57">🇨🇴 +57</option>
+                                    <option value="+269">🇰🇲 +269</option>
+                                    <option value="+242">🇨🇬 +242</option>
+                                    <option value="+506">🇨🇷 +506</option>
+                                    <option value="+385">🇭🇷 +385</option>
+                                    <option value="+53">🇨🇺 +53</option>
+                                    <option value="+357">🇨🇾 +357</option>
+                                    <option value="+420">🇨🇿 +420</option>
+                                    <option value="+45">🇩🇰 +45</option>
+                                    <option value="+253">🇩🇯 +253</option>
+                                    <option value="+593">🇪🇨 +593</option>
+                                    <option value="+20">🇪🇬 +20</option>
+                                    <option value="+503">🇸🇻 +503</option>
+                                    <option value="+240">🇬🇶 +240</option>
+                                    <option value="+291">🇪🇷 +291</option>
+                                    <option value="+372">🇪🇪 +372</option>
+                                    <option value="+251">🇪🇹 +251</option>
+                                    <option value="+679">🇫🇯 +679</option>
+                                    <option value="+358">🇫🇮 +358</option>
+                                    <option value="+241">🇬🇦 +241</option>
+                                    <option value="+220">🇬🇲 +220</option>
+                                    <option value="+995">🇬🇪 +995</option>
+                                    <option value="+49">🇩🇪 +49</option>
+                                    <option value="+233">🇬🇭 +233</option>
+                                    <option value="+30">🇬🇷 +30</option>
+                                    <option value="+299">🇬🇱 +299</option>
+                                    <option value="+502">🇬🇹 +502</option>
+                                    <option value="+224">🇬🇳 +224</option>
+                                    <option value="+245">🇬🇼 +245</option>
+                                    <option value="+592">🇬🇾 +592</option>
+                                    <option value="+509">🇭🇹 +509</option>
+                                    <option value="+504">🇭🇳 +504</option>
+                                    <option value="+852">🇭🇰 +852</option>
+                                    <option value="+36">🇭🇺 +36</option>
+                                    <option value="+354">🇮🇸 +354</option>
+                                    <option value="+91">🇮🇳 +91</option>
+                                    <option value="+62">🇮🇩 +62</option>
+                                    <option value="+98">🇮🇷 +98</option>
+                                    <option value="+964">🇮🇶 +964</option>
+                                    <option value="+353">🇮🇪 +353</option>
+                                    <option value="+39">🇮🇹 +39</option>
+                                    <option value="+225">🇨🇮 +225</option>
+                                    <option value="+81">🇯🇵 +81</option>
+                                    <option value="+962">🇯🇴 +962</option>
+                                    <option value="+7">🇰🇿 +7</option>
+                                    <option value="+254">🇰🇪 +254</option>
+                                    <option value="+965">🇰🇼 +965</option>
+                                    <option value="+996">🇰🇬 +996</option>
+                                    <option value="+856">🇱🇦 +856</option>
+                                    <option value="+371">🇱🇻 +371</option>
+                                    <option value="+961">🇱🇧 +961</option>
+                                    <option value="+266">🇱🇸 +266</option>
+                                    <option value="+231">🇱🇷 +231</option>
+                                    <option value="+218">🇱🇾 +218</option>
+                                    <option value="+423">🇱🇮 +423</option>
+                                    <option value="+370">🇱🇹 +370</option>
+                                    <option value="+352">🇱🇺 +352</option>
+                                    <option value="+853">🇲🇴 +853</option>
+                                    <option value="+389">🇲🇰 +389</option>
+                                    <option value="+261">🇲🇬 +261</option>
+                                    <option value="+265">🇲🇼 +265</option>
+                                    <option value="+60">🇲🇾 +60</option>
+                                    <option value="+960">🇲🇻 +960</option>
+                                    <option value="+223">🇲🇱 +223</option>
+                                    <option value="+356">🇲🇹 +356</option>
+                                    <option value="+222">🇲🇷 +222</option>
+                                    <option value="+230">🇲🇺 +230</option>
+                                    <option value="+52">🇲🇽 +52</option>
+                                    <option value="+373">🇲🇩 +373</option>
+                                    <option value="+377">🇲🇨 +377</option>
+                                    <option value="+976">🇲🇳 +976</option>
+                                    <option value="+382">🇲🇪 +382</option>
+                                    <option value="+212">🇲🇦 +212</option>
+                                    <option value="+258">🇲🇿 +258</option>
+                                    <option value="+95">🇲🇲 +95</option>
+                                    <option value="+264">🇳🇦 +264</option>
+                                    <option value="+977">🇳🇵 +977</option>
+                                    <option value="+31">🇳🇱 +31</option>
+                                    <option value="+64">🇳🇿 +64</option>
+                                    <option value="+505">🇳🇮 +505</option>
+                                    <option value="+227">🇳🇪 +227</option>
+                                    <option value="+234">🇳🇬 +234</option>
+                                    <option value="+850">🇰🇵 +850</option>
+                                    <option value="+47">🇳🇴 +47</option>
+                                    <option value="+968">🇴🇲 +968</option>
+                                    <option value="+92">🇵🇰 +92</option>
+                                    <option value="+970">🇵🇸 +970</option>
+                                    <option value="+972">🇵🇸 +972</option>
+                                    <option value="+507">🇵🇦 +507</option>
+                                    <option value="+675">🇵🇬 +675</option>
+                                    <option value="+595">🇵🇾 +595</option>
+                                    <option value="+51">🇵🇪 +51</option>
+                                    <option value="+63">🇵🇭 +63</option>
+                                    <option value="+48">🇵🇱 +48</option>
+                                    <option value="+351">🇵🇹 +351</option>
+                                    <option value="+974">🇶🇦 +974</option>
+                                    <option value="+40">🇷🇴 +40</option>
+                                    <option value="+7">🇷🇺 +7</option>
+                                    <option value="+250">🇷🇼 +250</option>
+                                    <option value="+966">🇸🇦 +966</option>
+                                    <option value="+221">🇸🇳 +221</option>
+                                    <option value="+381">🇷🇸 +381</option>
+                                    <option value="+65">🇸🇬 +65</option>
+                                    <option value="+421">🇸🇰 +421</option>
+                                    <option value="+386">🇸🇮 +386</option>
+                                    <option value="+677">🇸🇧 +677</option>
+                                    <option value="+252">🇸🇴 +252</option>
+                                    <option value="+27">🇿🇦 +27</option>
+                                    <option value="+82">🇰🇷 +82</option>
+                                    <option value="+211">🇸🇸 +211</option>
+                                    <option value="+34">🇪🇸 +34</option>
+                                    <option value="+94">🇱🇰 +94</option>
+                                    <option value="+249">🇸🇩 +249</option>
+                                    <option value="+597">🇸🇷 +597</option>
+                                    <option value="+268">🇸🇿 +268</option>
+                                    <option value="+46">🇸🇪 +46</option>
+                                    <option value="+41">🇨🇭 +41</option>
+                                    <option value="+963">🇸🇾 +963</option>
+                                    <option value="+886">🇹🇼 +886</option>
+                                    <option value="+992">🇹🇯 +992</option>
+                                    <option value="+255">🇹🇿 +255</option>
+                                    <option value="+66">🇹🇭 +66</option>
+                                    <option value="+228">🇹🇬 +228</option>
+                                    <option value="+216">🇹🇳 +216</option>
+                                    <option value="+90">🇹🇷 +90</option>
+                                    <option value="+993">🇹🇲 +993</option>
+                                    <option value="+256">🇺🇬 +256</option>
+                                    <option value="+380">🇺🇦 +380</option>
+                                    <option value="+971">🇦🇪 +971</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                    <option value="+598">🇺🇾 +598</option>
+                                    <option value="+998">🇺🇿 +998</option>
+                                    <option value="+58">🇻🇪 +58</option>
+                                    <option value="+84">🇻🇳 +84</option>
+                                    <option value="+967">🇾🇪 +967</option>
+                                    <option value="+260">🇿🇲 +260</option>
+                                    <option value="+263">🇿🇼 +263</option>
+                                </select>
+                                <input type="tel" id="company-phone" class="form-input" 
+                                    style="flex-grow: 1; height: 36px; padding: 4px 8px;"
+                                    placeholder="Entrez le numéro de téléphone" 
+                                    pattern="[0-9 ]{6,19}" title="Entrez un numéro de téléphone valide (6-15 chiffres)" required>
+                            </div>
+                            <small class="form-text text-muted" style="margin-top: 4px; display: block; font-size: 0.8em; color: #64748b;">
+                                Exemple: pour la France, sélectionnez +33 et saisissez votre numéro sans le 0 initial.
+                            </small>
+                        </div>
+                        <!-- email -->
+                        <div class="form-group">
+                            <label for="company-email" class="form-label ">Adresse e-mail</label>
+                            <input type="email" id="company-email" class="form-input"
+                                placeholder="Entrez l'adresse e-mail" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company-website" class="form-label">Site Web</label>
+                            <input type="url" id="company-website" class="form-input"
+                                placeholder="Entrez l'URL du site web">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company-sector" class="form-label">Secteur d'activité</label>
+                            <select id="company-sector" class="form-select" required>
+                                <option value="">Sélectionnez un secteur</option>
+                                <option value="technology">Technologie</option>
+                                <option value="finance">Finance</option>
+                                <option value="healthcare">Santé</option>
+                                <option value="retail">Commerce</option>
+                                <option value="manufacturing">Industrie</option>
+                                <option value="education">Éducation</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company-size" class="form-label">Taille de l'entreprise</label>
+                            <select id="company-size" class="form-select">
+                                <option value="">Sélectionnez la taille</option>
+                                <option value="startup">Startup (1-10 employés)</option>
+                                <option value="small">Petite (11-50 employés)</option>
+                                <option value="medium">Moyenne (51-250 employés)</option>
+                                <option value="large">Grande (251-1000 employés)</option>
+                                <option value="enterprise">Entreprise (1000+ employés)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="justify-content: center; background-color: #ffea00; color: #1e293b;">
+                            Passer au rapport
+                            <i class="fas fa-magic" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+
+    <script src="src/js/insights-generator.js"></script>
+    <script src="src/js/app.js"></script>
+</body>
+
+</html>

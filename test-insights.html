@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Insights Generator</title>
+    <link rel="stylesheet" href="src/css/loader.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        button {
+            background: #081d3f;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background: #0c2a5c;
+        }
+        
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Insights Generator</h1>
+    
+    <div class="test-section">
+        <h2>Test Configuration</h2>
+        <p>This page tests the insights generator with sample data.</p>
+        <button onclick="runTest()">🚀 Generate Test Insights</button>
+    </div>
+    
+    <div class="info">
+        <h3>ℹ️ What happens when you click the button:</h3>
+        <ol>
+            <li>Sample audit data is created</li>
+            <li>Loader appears with animation</li>
+            <li>AI generates insights via Gemini API</li>
+            <li>PDF page opens with results</li>
+            <li>Loader disappears</li>
+        </ol>
+    </div>
+
+    <script src="src/js/insights-generator.js"></script>
+    <script>
+        async function runTest() {
+            // Create sample audit data
+            const sampleQuestionnaire = {
+                axes: [
+                    {
+                        id: 1,
+                        title: "STRATÉGIE IA",
+                        weight_percent: 25,
+                        sub_axes: [
+                            {
+                                id: "1.1",
+                                title: "Vision & Alignement Stratégique",
+                                questions: [
+                                    { id: "Q1.1.1", text: "Vision IA définie?" },
+                                    { id: "Q1.1.2", text: "Stratégie alignée?" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: "DATA",
+                        weight_percent: 20,
+                        sub_axes: [
+                            {
+                                id: "2.1",
+                                title: "Qualité des données",
+                                questions: [
+                                    { id: "Q2.1.1", text: "Données de qualité?" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: "TECHNOLOGIES",
+                        weight_percent: 15,
+                        sub_axes: [
+                            {
+                                id: "3.1",
+                                title: "Infrastructure technique",
+                                questions: [
+                                    { id: "Q3.1.1", text: "Infrastructure adaptée?" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: "GOUVERNANCE",
+                        weight_percent: 15,
+                        sub_axes: [
+                            {
+                                id: "4.1",
+                                title: "Cadre de gouvernance",
+                                questions: [
+                                    { id: "Q4.1.1", text: "Gouvernance définie?" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        title: "CULTURE ORGANISATIONNELLE",
+                        weight_percent: 15,
+                        sub_axes: [
+                            {
+                                id: "5.1",
+                                title: "Culture IA",
+                                questions: [
+                                    { id: "Q5.1.1", text: "Culture favorable?" }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        title: "INFRASTRUCTURE",
+                        weight_percent: 10,
+                        sub_axes: [
+                            {
+                                id: "6.1",
+                                title: "Infrastructure IT",
+                                questions: [
+                                    { id: "Q6.1.1", text: "Infrastructure robuste?" }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            const sampleResponses = {
+                "Q1.1.1": { score: 4 },
+                "Q1.1.2": { score: 3 },
+                "Q2.1.1": { score: 4 },
+                "Q3.1.1": { score: 3 },
+                "Q4.1.1": { score: 3 },
+                "Q5.1.1": { score: 4 },
+                "Q6.1.1": { score: 3 }
+            };
+
+            const sampleCompanyInfo = {
+                name: "TechCorp Solutions",
+                email: "contact@techcorp.com",
+                phone: "+33 6 12 34 56 78",
+                sector: "technology",
+                size: "medium",
+                description: "Entreprise de développement logiciel spécialisée dans les solutions cloud"
+            };
+
+            const auditData = {
+                axes: sampleQuestionnaire.axes,
+                responses: sampleResponses
+            };
+
+            // Initialize and run generator
+            const generator = new InsightsGenerator();
+            generator.initialize(auditData, sampleCompanyInfo);
+            
+            try {
+                await generator.generateAndDisplay();
+                console.log('✅ Test completed successfully!');
+            } catch (error) {
+                console.error('❌ Test failed:', error);
+                alert('Test failed: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
