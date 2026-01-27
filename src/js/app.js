@@ -919,6 +919,48 @@ function scrollToInfo() {
     }
 }
 
+/**
+ * Reset application data (localStorage) and go back to the overview (Accueil)
+ * This clears audit data stored in the browser and resets app state in memory.
+ */
+function resetAndGoHome() {
+    // Ask for confirmation to prevent accidental data loss
+    const confirmed = confirm('Voulez-vous vider les données locales et retourner à l\'accueil ?\nToutes les réponses et informations seront perdues.');
+    if (!confirmed) return;
+
+    // Keys we want to clear
+    const keysToRemove = [
+        'audit-responses',
+        'company-info',
+        'last-update',
+        'generated-insights',
+        'audit-insights',
+        'audit-insights-text',
+        'audit-insights-generated',
+        'insights-generated',
+        'audit-insights-date',
+        'insights-date',
+        'audit-responses-hash',
+        'audit-responses-changed'
+    ];
+
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+
+    // Reset in-memory app state if available
+    if (typeof app !== 'undefined' && app) {
+        app.responses = {};
+        app.companyInfo = {};
+        app.currentAxis = 0;
+        app.saveData();
+        app.updateUI();
+        app.showView('overview');
+        app.showNotification('Données effacées. Retour à l\'accueil.', 'success');
+    } else {
+        // Fallback: reload to index page
+        window.location.href = '/index.html';
+    }
+}
+
 function navigateAxis(direction) {
     app.navigateAxis(direction);
 }
