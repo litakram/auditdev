@@ -192,7 +192,7 @@ IMPORTANT:
      * Call Google Gemini API
      */
     async callGeminiAPI(prompt) {
-        const apiKey = 'AIzaSyADjGk72VLTpibBdFLzT3NkTshgU2pRdDQ'; // API key from user
+        const apiKey = ''; // API key from user
         const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
         const requestBody = {
