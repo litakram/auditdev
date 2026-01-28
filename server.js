@@ -96,7 +96,7 @@ app.post('/api/generate-pdf', async (req, res) => {
                 const { execSync } = require('child_process');
                 try {
                     // Use npx to ensure correct playwright install is invoked
-                    execSync('npx playwright install --with-deps', { stdio: 'inherit', timeout: 10 * 60 * 1000 });
+                    execSync('npx playwright install', { stdio: 'inherit', timeout: 10 * 60 * 1000 });
                 } catch (installErr) {
                     console.error('Playwright install failed:', installErr.message || installErr);
                     throw new Error('Playwright browsers not installed and automatic install failed: ' + (installErr.message || installErr));
