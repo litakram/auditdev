@@ -76,7 +76,7 @@ app.post('/api/generate-pdf', async (req, res) => {
         // Include Render-friendly flags: --no-sandbox and --disable-setuid-sandbox
         browser = await chromium.launch({
             headless: CONFIG.PLAYWRIGHT_HEADLESS,
-            args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox']
+            args: ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
         });
         
         const page = await browser.newPage();

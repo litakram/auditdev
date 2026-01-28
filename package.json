@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "postinstall": "npx playwright install --with-deps"
+    "build": "echo \"No build step\"",
+    "render-build": "npx playwright install chromium && npm run build",
+    "postinstall": "npx playwright install chromium"
   },
   "keywords": [
     "pdf",
