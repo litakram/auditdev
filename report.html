@@ -1104,8 +1104,34 @@
 
                 statusDiv.textContent = 'Envoi au serveur...';
 
+                // Resolve server URL for PDF generation (explicit override -> /api/config -> same-origin)
+                async function resolvePdfApiUrl() {
+                    // 1) explicit override from hosting (e.g. set window.API_URL in production)
+                    if (window.API_URL) {
+                        return (window.API_URL.replace(/\/$/, '')) + '/api/generate-pdf';
+                    }
+
+                    // 2) try discovery via /api/config but ignore public Gemini base URLs
+                    try {
+                        const cfgResp = await fetch('/api/config');
+                        if (cfgResp && cfgResp.ok) {
+                            const cfg = await cfgResp.json();
+                            const base = cfg.apiProxyUrl || cfg.baseUrl || '';
+                            if (base && !/generativelanguage|googleapis\.com/i.test(base)) {
+                                return (base.replace(/\/$/, '')) + '/api/generate-pdf';
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('Could not fetch /api/config for PDF URL discovery', e);
+                    }
+
+                    // 3) fallback to same-origin relative endpoint
+                    return '/api/generate-pdf';
+                }
+
+                const apiUrl = await resolvePdfApiUrl();
                 // Send to server for PDF generation
-                const response = await fetch('http://localhost:3001/api/generate-pdf', {
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
