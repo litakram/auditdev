@@ -1086,17 +1086,15 @@
             statusDiv.textContent = 'Préparation du PDF...';
             statusDiv.classList.add('show');
 
-            // Ensure these are declared in upper scope so catch/finally can restore display
-            const downloadContainer = document.getElementById('download-btn-container');
-            let originalDisplay = downloadContainer ? downloadContainer.style.display : '';
-
             try {
                 // Get company name for filename
                 const companyName = document.getElementById('cover-company-name').textContent || 'Entreprise';
                 const filename = `Audit_Maturite_IA_${companyName.replace(/\s+/g, '_')}.pdf`;
 
                 // Hide download button temporarily
-                if (downloadContainer) downloadContainer.style.display = 'none';
+                const downloadContainer = document.getElementById('download-btn-container');
+                const originalDisplay = downloadContainer.style.display;
+                downloadContainer.style.display = 'none';
 
                 statusDiv.textContent = 'Collecte des ressources...';
 

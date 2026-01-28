@@ -72,43 +72,21 @@ app.post('/api/generate-pdf', async (req, res) => {
             return res.status(400).json({ error: 'HTML content is required' });
         }
 
-        // Helper to attempt launch and retry install if browsers are missing
-        async function launchChromiumWithRetry() {
-            const launchArgs = [
-                '--disable-gpu',
-                '--no-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-setuid-sandbox',
-                '--disable-software-rasterizer',
-                '--single-process',
-                '--no-zygote'
-            ];
-
-            try {
-                return await chromium.launch({
-                    headless: CONFIG.PLAYWRIGHT_HEADLESS,
-                    args: launchArgs
-                });
-            } catch (err) {
-                // Avoid performing heavy installs at request time (can OOM / be blocked by platform)
-                console.error('Playwright launch failed at runtime:', err && err.message ? err.message : err);
-                // Provide actionable message to operator and return a clear error to the client
-                throw new Error('Playwright browser launch failed. Ensure Playwright browsers are installed during build: run "npx playwright install --with-deps" on the host or add a postinstall script to package.json. Full error: ' + (err && err.message ? err.message : String(err)));
-            }
-        }
-
-        // Launch browser
-        browser = await launchChromiumWithRetry();
-
+        // Launch browser with optimized settings for PDF generation
+        browser = await chromium.launch({
+            headless: CONFIG.PLAYWRIGHT_HEADLESS,
+            args: ['--disable-gpu', '--no-sandbox']
+        });
+        
         const page = await browser.newPage();
 
         // Set viewport for consistent rendering
         await page.setViewportSize({ width: 1024, height: 1280 });
 
         // Set content and wait for network to settle
-        await page.setContent(html, {
+        await page.setContent(html, { 
             waitUntil: 'networkidle',
-            timeout: 60000
+            timeout: 30000
         });
 
         // Wait a bit for any async rendering
@@ -125,11 +103,11 @@ app.post('/api/generate-pdf', async (req, res) => {
             },
             printBackground: true,
             scale: 1.0,
-            timeout: 60000
+            timeout: 30000
         });
 
         // Close browser
-        try { await browser.close(); } catch (e) { /* ignore close errors */ }
+        await browser.close();
 
         // Send PDF as response
         res.setHeader('Content-Type', 'application/pdf');
@@ -138,8 +116,8 @@ app.post('/api/generate-pdf', async (req, res) => {
         res.send(pdfBuffer);
 
     } catch (error) {
-        console.error('PDF Generation Error:', error && error.stack ? error.stack : error);
-
+        console.error('PDF Generation Error:', error);
+        
         // Close browser if still open
         if (browser) {
             try {
@@ -149,14 +127,10 @@ app.post('/api/generate-pdf', async (req, res) => {
             }
         }
 
-        const isTimeout = error && /timeout/i.test(String(error.message || ''));
-        const statusCode = isTimeout ? 408 : 500;
-
-        // Provide more diagnostic info for deploy logs; avoid leaking secrets
+        const statusCode = error.message.includes('timeout') ? 408 : 500;
         res.status(statusCode).json({
             error: 'Failed to generate PDF',
-            message: String(error.message || error),
-            hint: 'If this mentions missing browser binaries, run "npx playwright install --with-deps" during build or enable automatic install on startup',
+            message: error.message,
             timestamp: new Date().toISOString()
         });
     }
@@ -230,12 +204,4 @@ app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
     console.log(`API Endpoint: POST http://localhost:${PORT}/api/generate-pdf`);
     console.log(`==============================`);
-});
-
-// Global handlers for better diagnostics in deploy logs
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-process.on('uncaughtException', (err) => {
-    console.error('Uncaught Exception:', err && err.stack ? err.stack : err);
 });
