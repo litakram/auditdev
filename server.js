@@ -72,21 +72,56 @@ app.post('/api/generate-pdf', async (req, res) => {
             return res.status(400).json({ error: 'HTML content is required' });
         }
 
-        // Launch browser with optimized settings for PDF generation
-        browser = await chromium.launch({
-            headless: CONFIG.PLAYWRIGHT_HEADLESS,
-            args: ['--disable-gpu', '--no-sandbox']
-        });
-        
+        // Helper to attempt launch and retry install if browsers are missing
+        async function launchChromiumWithRetry() {
+            const launchArgs = [
+                '--disable-gpu',
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-setuid-sandbox',
+                '--disable-software-rasterizer',
+                '--single-process',
+                '--no-zygote'
+            ];
+
+            try {
+                return await chromium.launch({
+                    headless: CONFIG.PLAYWRIGHT_HEADLESS,
+                    args: launchArgs
+                });
+            } catch (err) {
+                console.warn('Playwright launch failed, attempting to install browsers and retry...', err.message);
+
+                // Try to install browsers (best-effort). This can be slow on first-run.
+                const { execSync } = require('child_process');
+                try {
+                    // Use npx to ensure correct playwright install is invoked
+                    execSync('npx playwright install --with-deps', { stdio: 'inherit', timeout: 10 * 60 * 1000 });
+                } catch (installErr) {
+                    console.error('Playwright install failed:', installErr.message || installErr);
+                    throw new Error('Playwright browsers not installed and automatic install failed: ' + (installErr.message || installErr));
+                }
+
+                // Retry launch once
+                return await chromium.launch({
+                    headless: CONFIG.PLAYWRIGHT_HEADLESS,
+                    args: launchArgs
+                });
+            }
+        }
+
+        // Launch browser
+        browser = await launchChromiumWithRetry();
+
         const page = await browser.newPage();
 
         // Set viewport for consistent rendering
         await page.setViewportSize({ width: 1024, height: 1280 });
 
         // Set content and wait for network to settle
-        await page.setContent(html, { 
+        await page.setContent(html, {
             waitUntil: 'networkidle',
-            timeout: 30000
+            timeout: 60000
         });
 
         // Wait a bit for any async rendering
@@ -103,11 +138,11 @@ app.post('/api/generate-pdf', async (req, res) => {
             },
             printBackground: true,
             scale: 1.0,
-            timeout: 30000
+            timeout: 60000
         });
 
         // Close browser
-        await browser.close();
+        try { await browser.close(); } catch (e) { /* ignore close errors */ }
 
         // Send PDF as response
         res.setHeader('Content-Type', 'application/pdf');
@@ -116,8 +151,8 @@ app.post('/api/generate-pdf', async (req, res) => {
         res.send(pdfBuffer);
 
     } catch (error) {
-        console.error('PDF Generation Error:', error);
-        
+        console.error('PDF Generation Error:', error && error.stack ? error.stack : error);
+
         // Close browser if still open
         if (browser) {
             try {
@@ -127,10 +162,14 @@ app.post('/api/generate-pdf', async (req, res) => {
             }
         }
 
-        const statusCode = error.message.includes('timeout') ? 408 : 500;
+        const isTimeout = error && /timeout/i.test(String(error.message || ''));
+        const statusCode = isTimeout ? 408 : 500;
+
+        // Provide more diagnostic info for deploy logs; avoid leaking secrets
         res.status(statusCode).json({
             error: 'Failed to generate PDF',
-            message: error.message,
+            message: String(error.message || error),
+            hint: 'If this mentions missing browser binaries, run "npx playwright install --with-deps" during build or enable automatic install on startup',
             timestamp: new Date().toISOString()
         });
     }
