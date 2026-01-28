@@ -90,23 +90,10 @@ app.post('/api/generate-pdf', async (req, res) => {
                     args: launchArgs
                 });
             } catch (err) {
-                console.warn('Playwright launch failed, attempting to install browsers and retry...', err.message);
-
-                // Try to install browsers (best-effort). This can be slow on first-run.
-                const { execSync } = require('child_process');
-                try {
-                    // Use npx to ensure correct playwright install is invoked
-                    execSync('npx playwright install', { stdio: 'inherit', timeout: 10 * 60 * 1000 });
-                } catch (installErr) {
-                    console.error('Playwright install failed:', installErr.message || installErr);
-                    throw new Error('Playwright browsers not installed and automatic install failed: ' + (installErr.message || installErr));
-                }
-
-                // Retry launch once
-                return await chromium.launch({
-                    headless: CONFIG.PLAYWRIGHT_HEADLESS,
-                    args: launchArgs
-                });
+                // Avoid performing heavy installs at request time (can OOM / be blocked by platform)
+                console.error('Playwright launch failed at runtime:', err && err.message ? err.message : err);
+                // Provide actionable message to operator and return a clear error to the client
+                throw new Error('Playwright browser launch failed. Ensure Playwright browsers are installed during build: run "npx playwright install --with-deps" on the host or add a postinstall script to package.json. Full error: ' + (err && err.message ? err.message : String(err)));
             }
         }
 
@@ -243,4 +230,12 @@ app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
     console.log(`API Endpoint: POST http://localhost:${PORT}/api/generate-pdf`);
     console.log(`==============================`);
+});
+
+// Global handlers for better diagnostics in deploy logs
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err && err.stack ? err.stack : err);
 });
