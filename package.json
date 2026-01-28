@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "vercel-build": "npx playwright install --with-deps"
+    "render-build": "npx playwright install",
+    "postinstall": "npx playwright install"
   },
   "keywords": [
     "pdf",
