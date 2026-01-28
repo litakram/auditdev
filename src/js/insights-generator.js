@@ -289,12 +289,19 @@ IMPORTANT:
                 try {
                     const cfgResp = await fetch('/api/config');
                     if (cfgResp.ok) {
-                        const cfg = await cfgResp.json();
-                        // if the server provided a base URL, use it
-                        if (cfg && cfg.baseUrl) {
-                            return cfg.baseUrl.replace(/\/+$/,'') + '/api/generate-insights';
+                            const cfg = await cfgResp.json();
+                            // if the server provided a base URL, use it — but avoid accidentally using the Gemini public API base
+                            if (cfg && cfg.baseUrl) {
+                                const base = String(cfg.baseUrl || '');
+                                const isPublicGemini = /generativelanguage|googleapis\.com/i.test(base);
+                                if (!isPublicGemini) {
+                                    return base.replace(/\/+$/,'') + '/api/generate-insights';
+                                } else {
+                                    // Detected that cfg.baseUrl points to the public Gemini API — ignore it and fallback
+                                    console.warn('Ignoring cfg.baseUrl because it points to public Gemini API:', base);
+                                }
+                            }
                         }
-                    }
                 } catch (e) {
                     // ignore and fallback
                 }
