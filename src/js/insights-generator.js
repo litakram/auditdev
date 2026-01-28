@@ -278,9 +278,33 @@ IMPORTANT:
      */
     async callGeminiAPI(prompt) {
         try {
-            // Call server-side proxy to keep API key secret
-            // Use absolute server URL for local dev; change if your server is hosted elsewhere
-            const serverUrl = 'http://localhost:3001/api/generate-insights';
+            // Resolve server proxy URL dynamically to avoid calling localhost from deployed site.
+            async function resolveServerUrl() {
+                // 1) If a global override is provided (e.g. injected at deploy time), use it
+                if (window && window.API_URL) {
+                    return window.API_URL.replace(/\/+$/,'') + '/api/generate-insights';
+                }
+
+                // 2) Try to read server config from same-origin `/api/config` (works when server and frontend share host)
+                try {
+                    const cfgResp = await fetch('/api/config');
+                    if (cfgResp.ok) {
+                        const cfg = await cfgResp.json();
+                        // if the server provided a base URL, use it
+                        if (cfg && cfg.baseUrl) {
+                            return cfg.baseUrl.replace(/\/+$/,'') + '/api/generate-insights';
+                        }
+                    }
+                } catch (e) {
+                    // ignore and fallback
+                }
+
+                // 3) Fallback to relative API path on the same origin. This is the safest for many deployments where
+                // the static site and API are served from the same domain (e.g., Render with a single service).
+                return '/api/generate-insights';
+            }
+
+            const serverUrl = await resolveServerUrl();
             const response = await fetch(serverUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
